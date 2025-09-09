@@ -3,6 +3,58 @@ title: "elicited-dag-analysis"
 format: html
 ---
 
+# Sessions
+
+``` {r}
+library(tidyverse)
+library(dagitty)
+to_duration <- function(x){
+    x |> 
+        str_remove(":00$") |> 
+        ms()
+}
+
+session_data_raw <- tibble::tribble(
+    ~`Session`, ~Stat.familiarity, ~GCM.familiarity, ~GCM.validity, ~Tutorial.duration, ~Modelling.duration,
+              "S1 - R1",                 1,               1L,             3,          "4:39:00",          "50:10:00",
+              "S1 - R2",                 3,               2L,           3.5,                 NA,                  NA,
+              "S1 - R3",                 1,               1L,             3,                 NA,                  NA,
+                   "S2",                 2,               2L,           3.5,          "4:20:00",          "46:06:00",
+                   "S3",               2.2,               1L,             3,          "5:53:00",          "36:37:00",
+                   "S4",                 2,               3L,           1.5,          "4:34:00",          "34:43:00",
+                   "S5",                 2,               1L,             4,          "2:45:00",          "50:23:00",
+                   "S6",                 2,               2L,           2.5,          "4:28:00",          "41:13:00",
+                   "S7",              2.75,               2L,           2.5,          "5:00:00",          "38:55:00",
+                   "S8",                 4,               2L,             3,          "4:53:00",          "46:04:00"
+    )
+
+session_data <- tibble::tribble(
+    ~`Model`, ~Stat.familiarity, ~GCM.familiarity, ~GCM.validity, ~Tutorial.duration, ~Modelling.duration,
+              "S1",                 1.67,               1.33,             3.167,          "4:39:00",          "50:10:00",
+                   "S2",                 2,               2,           3.5,          "4:20:00",          "46:06:00",
+                   "S3",               2.2,               1,             3,          "5:53:00",          "36:37:00",
+                   "S4",                 2,               3,           1.5,          "4:34:00",          "34:43:00",
+                   "S5",                 2,               1,             4,          "2:45:00",          "50:23:00",
+                   "S6",                 2,               2,           2.5,          "4:28:00",          "41:13:00",
+                   "S7",              2.75,               2,           2.5,          "5:00:00",          "38:55:00",
+                   "S8",                 4,               2,             3,          "4:53:00",          "46:04:00"
+    ) |> 
+    mutate(across(ends_with("duration"), to_duration)) 
+
+```
+
+
+``` {r}
+library(scales)
+
+session_data |> 
+    ggplot(aes(x = Modelling.duration, y = GCM.validity)) +
+    geom_point() +
+    scale_y_continuous(limits = c(1, 4)) +
+     scale_x_time(labels = label_time(format = "%M:%S")) +
+    theme_minimal()
+```
+
 # Defining DAGs
 
 ``` {r}
@@ -20,43 +72,43 @@ library(tidygraph)
 # .Act means "action" or "activity", where people do things or make decisions.
 
 # S.Att.SocCap - social capital
-# T.Act.Integ - teacher (or student) acting with integrity (academic)
+# T.Aff.Integ - teacher (or student) acting with integrity (academic)
 # LD.Task - assessment design quality
-# T.RelMark - teacher reliable marking
+# T.Cp.Mark - teacher reliable marking
 # T/S.WrkLd - teacher / student workload
 dag_s1 <- dagitty('dag S1 {
 CD [pos="-0.228,0.457"]
 Grade [outcome,pos="-0.830,0.442"]
 H [pos="0.285,-0.845"]
 LD.Task [pos="-0.408,-0.241"]
-S.Act.Integ [pos="-0.202,-0.798"]
+S.Aff.Integ [pos="-0.202,-0.798"]
 S.Att.SocCap [pos="-0.627,-1.067"]
 S.Kn [exposure,pos="0.046,-0.298"]
 S.WrkLd [pos="0.115,0.191"]
-T.Act.Integ [pos="-0.748,-0.410"]
-T.RelMark [pos="-1.079,-0.201"]
+T.Aff.Integ [pos="-0.748,-0.410"]
+T.Cp.Mark [pos="-1.079,-0.201"]
 T.WrkLd [pos="-1.386,-0.453"]
 H -> S.Kn
 LD.Task -> CD
-LD.Task -> T.RelMark
-S.Act.Integ -> LD.Task
+LD.Task -> T.Cp.Mark
+S.Aff.Integ -> LD.Task
 S.Att.SocCap -> H
 S.Att.SocCap -> LD.Task
-S.Att.SocCap -> T.Act.Integ
-S.Att.SocCap -> T.RelMark
+S.Att.SocCap -> T.Aff.Integ
+S.Att.SocCap -> T.Cp.Mark
 S.Kn -> LD.Task
 S.Kn -> S.WrkLd
 S.WrkLd -> Grade
-T.Act.Integ -> LD.Task
-T.Act.Integ -> T.RelMark
-T.RelMark -> CD
-T.RelMark -> Grade
-T.WrkLd -> T.RelMark
+T.Aff.Integ -> LD.Task
+T.Aff.Integ -> T.Cp.Mark
+T.Cp.Mark -> CD
+T.Cp.Mark -> Grade
+T.WrkLd -> T.Cp.Mark
 }')
 # plot(dag_s1)
 
 # S.Act - student activity. Doing work
-# T.Inst - teacher instruction (quality of)
+# T.Cp.Inst - teacher instruction (quality of)
 # H.Peer - student peer learning / assistance
 # T.Fb - teacher feedback
 # S.SRL - student SRL
@@ -73,7 +125,7 @@ LD [pos="-0.670,-0.848"]
 S.Act [pos="-0.608,-0.348"]
 S.Cp.SRL [pos="-0.614,0.097"]
 S.Kn [exposure,pos="-0.228,0.018"]
-T.Inst [pos="0.073,-0.694"]
+T.Cp.Inst [pos="0.073,-0.694"]
 H.AI.evil -> Grade
 H.AI.good -> CD.Str
 H.AI.good -> S.Cp.SRL
@@ -86,7 +138,7 @@ LD -> CD.Str
 LD -> H.AI.good
 LD -> H.Peer
 LD -> S.Act
-LD -> T.Inst
+LD -> T.Cp.Inst
 S.Act -> CD.LMS
 S.Act -> CD.Str
 S.Act -> H.Tut.Fb
@@ -96,20 +148,20 @@ S.Cp.SRL -> Grade
 S.Cp.SRL -> H.AI.evil
 S.Kn -> Grade
 S.Kn -> S.Cp.SRL
-T.Inst -> S.Kn
+T.Cp.Inst -> S.Kn
 }
 ')
 # plot(dag_s2)
 
 # T.KnSt - Teacher knowing students
 # T.AIlit - Teacher AI literacy
-# T.AIuse - Teacher AI use
+# T.Act.UseAI - Teacher AI use
 # T.KnSub - Teacher subject knowledge
 # S.Act - Student activity, doing the work. Was "S: Course Materials" on graph
 # H.Tut - Help from the tutor
 # H.SubC - Help from the subject coordinator
 # S.Perf - Student performance on the task
-# S.Kn.Aca - student academic skill
+# S.Cp.Aca - student academic skill
 
 dag_s3 <- dagitty('dag S3 {
 CD.LMS [pos="-0.156,0.899"]
@@ -121,18 +173,18 @@ H.Tut [pos="-0.003,-0.600"]
 LD.Task [pos="-1.245,-0.050"]
 S.Act [pos="-0.621,-0.571"]
 S.Kn [exposure,pos="-0.706,-0.147"]
-S.Kn.Aca [pos="0.305,0.083"]
+S.Cp.Aca [pos="0.305,0.083"]
 S.Perf [pos="-0.660,0.370"]
-T.AIuse [pos="-0.905,-0.032"]
+T.Act.UseAI [pos="-0.905,-0.032"]
 T.Kn.AI [pos="-1.380,0.414"]
 T.Kn.Ass [pos="-1.720,0.137"]
 T.Kn.Sub [pos="-1.301,-0.830"]
-T.KnStu [pos="-1.638,-0.366"]
+T.Cp.KnStu [pos="-1.638,-0.366"]
 H.AI -> H.Tut
 H.AI -> S.Perf
 H.Peer -> CD.LMS
 H.Peer -> S.Kn
-H.Peer -> S.Kn.Aca
+H.Peer -> S.Cp.Aca
 H.Tut -> CD.LMS
 H.Tut -> S.Kn
 LD.Task -> CD.Str
@@ -140,31 +192,31 @@ LD.Task -> S.Perf
 S.Act -> CD.LMS
 S.Act -> S.Kn
 S.Kn -> S.Perf
-S.Kn.Aca -> S.Perf
+S.Cp.Aca -> S.Perf
 S.Perf -> Grade
 S.Perf -> H.Tut
-T.AIuse -> LD.Task
+T.Act.UseAI -> LD.Task
 T.Kn.AI -> LD.Task
 T.Kn.Ass -> LD.Task
 T.Kn.Sub -> H.Tut
 T.Kn.Sub -> LD.Task
 T.Kn.Sub -> S.Act
-T.KnStu -> LD.Task
-T.KnStu -> S.Kn
+T.Cp.KnStu -> LD.Task
+T.Cp.KnStu -> S.Kn
 }')
 # plot(dag_s3)
 
 # S4
 
 # CD.Att - attendance
-# S.Kn.Fb - Student feedback literacy
-# S.Kn.EvJdg - Student evaluative judgement
+# S.Cp.Fb - Student feedback literacy
+# S.Cp.EvJdg - Student evaluative judgement
 # S.Kn.Prior - Base / prior knowledge
 # S.Kn - Knowledge to be measured at end of sub
 # S.Aff.MindSet - Student affective state: Effort / willingness / learning mindset
 # S.Act.Fb - Student acting / taking on feedback
 # S.Act.Frm - Student working on formative tasks
-# S.Lrn.Fb - Student learns from feedback
+# S.Cp.Fb - Student learns from feedback
 # S.Att.Nro - Student neurodivergent 
 # S.Att.Hsk - Student attribute, help seeking
 
@@ -181,14 +233,14 @@ S.Aff.MindSet [pos="-1.671,-1.290"]
 S.Att.HSk [pos="0.292,-0.755"]
 S.Att.Nro [pos="0.877,-1.078"]
 S.Kn [exposure,pos="-0.889,-0.187"]
-S.Kn.EvJdg [pos="-0.598,-1.261"]
-S.Kn.Fb [pos="-1.026,-1.204"]
+S.Cp.EvJdg [pos="-0.598,-1.261"]
+S.Cp.Fb [pos="-1.026,-1.204"]
 S.Kn.Prior [pos="0.014,-1.337"]
-S.Lrn.Fb [pos="-0.408,-0.172"]
+S.Cp.Fb [pos="-0.408,-0.172"]
 S.WrkLd [pos="0.436,-1.200"]
 H.AI -> Grade
-H.AI -> S.Lrn.Fb
-H.Peer -> S.Lrn.Fb
+H.AI -> S.Cp.Fb
+H.Peer -> S.Cp.Fb
 H.Tut -> S.Kn
 S.Act.Fb -> S.Act.Frm
 S.Act.Frm -> CD.LMS
@@ -202,19 +254,19 @@ S.Att.Nro -> H.AI
 S.Att.Nro -> S.Att.HSk
 S.Kn -> Grade
 S.Kn -> S.Act.Fb
-S.Kn.EvJdg -> S.Act.Fb
-S.Kn.EvJdg -> S.Act.Frm
-S.Kn.EvJdg -> S.Lrn.Fb
-S.Kn.Fb -> S.Act.Fb
-S.Kn.Fb -> S.Act.Frm
+S.Cp.EvJdg -> S.Act.Fb
+S.Cp.EvJdg -> S.Act.Frm
+S.Cp.EvJdg -> S.Cp.Fb
+S.Cp.Fb -> S.Act.Fb
+S.Cp.Fb -> S.Act.Frm
 S.Kn.Prior -> S.Act.Frm
-S.Lrn.Fb -> S.Kn
+S.Cp.Fb -> S.Kn
 S.WrkLd -> H.AI
 S.WrkLd -> S.Act.Frm
 }')
 # plot(dag_s4)
 
-# S.Lrn - Student Learns, in this case used for "knowledge retention"
+# S.Cp.Lrn - Student Learns, in this case used for "knowledge retention"
 # S.Aff.Safe - Student feels safe
 # S.Aff.Joy - Student is enjoying learning
 # S.Aff.MindSet - Student attitude towards learning - change effort above
@@ -235,8 +287,8 @@ S.Aff.Joy [latent,pos="-0.130,-0.579"]
 S.Aff.MindSet [latent,pos="-0.882,-0.334"]
 S.Aff.Safe [latent,pos="-1.111,-0.453"]
 S.Kn [exposure,pos="-0.284,-0.223"]
-S.Kn.Aca [pos="-0.542,0.054"]
-S.Lrn [exposure,pos="-0.045,0.054"]
+S.Cp.Aca [pos="-0.542,0.054"]
+S.Cp.Lrn [exposure,pos="-0.045,0.054"]
 Grade.Exam -> Grade
 Grade.Proc -> Grade
 Grade.Quiz -> Grade
@@ -244,30 +296,30 @@ Grade.Ref -> Grade
 H.AI.Agent -> Grade.Ref
 H.AI.Fb -> Grade.Ref
 H.AI.Res -> Grade.Ref
-H.AI.Study -> S.Lrn
+H.AI.Study -> S.Cp.Lrn
 H.AI.evil -> Grade.Proc
 H.AI.evil -> Grade.Quiz
-H.AI.evil -> S.Lrn
+H.AI.evil -> S.Cp.Lrn
 H.Ment -> S.Aff.Joy
 H.Ment -> S.Aff.MindSet
 H.Ment -> S.Aff.Safe
-H.Ment -> S.Kn.Aca
+H.Ment -> S.Cp.Aca
 H.Tut -> S.Aff.Joy
 H.Tut -> S.Aff.MindSet
 H.Tut -> S.Kn
-H.Tut -> S.Kn.Aca
-S.Aff.Joy -> S.Lrn
+H.Tut -> S.Cp.Aca
+S.Aff.Joy -> S.Cp.Lrn
 S.Aff.MindSet -> Grade.Ref
 S.Aff.MindSet -> S.Kn
-S.Aff.MindSet -> S.Kn.Aca
-S.Aff.MindSet -> S.Lrn
+S.Aff.MindSet -> S.Cp.Aca
+S.Aff.MindSet -> S.Cp.Lrn
 S.Aff.Safe -> S.Aff.MindSet
 S.Kn -> Grade.Proc
 S.Kn -> Grade.Quiz
-S.Kn -> S.Lrn
-S.Kn.Aca -> Grade.Exam
-S.Kn.Aca -> Grade.Proc
-S.Lrn -> Grade.Exam
+S.Kn -> S.Cp.Lrn
+S.Cp.Aca -> Grade.Exam
+S.Cp.Aca -> Grade.Proc
+S.Cp.Lrn -> Grade.Exam
 }')
 dag_s6 <- dagitty('dag S6 {
 CD.LMS [pos="-0.081,-1.053"]
@@ -283,12 +335,12 @@ S.Act [pos="-0.617,-0.485"]
 S.Act.Fb [pos="-0.454,-0.740"]
 S.Att.Eq [pos="-1.275,-1.024"]
 S.Kn [exposure,pos="-0.853,-0.690"]
-S.Kn.Aca [pos="-1.000,-0.039"]
+S.Cp.Aca [pos="-1.000,-0.039"]
 CD.Str -> LD.Task
 Grade -> Post.Fb
 H -> Grade
 H -> H.AI.evil
-H -> S.Kn.Aca
+H -> S.Cp.Aca
 H.AI.evil -> Grade
 H.AI.good -> CD.LMS
 H.AI.good <-> S.Act
@@ -297,7 +349,7 @@ LD.AIguide -> H.AI.good
 LD.Task -> S.Kn
 LD.Task <-> S.Att.Eq
 Post.Fb -> S.Kn
-Post.Fb -> S.Kn.Aca
+Post.Fb -> S.Cp.Aca
 S.Act -> Grade
 S.Act -> S.Act.Fb
 S.Act.Fb -> H.AI.evil
@@ -305,7 +357,7 @@ S.Act.Fb -> H.AI.good
 S.Act.Fb -> S.Kn
 S.Att.Eq -> H
 S.Kn -> S.Act
-S.Kn.Aca -> Grade
+S.Cp.Aca -> Grade
 }
 ')
 
@@ -437,32 +489,9 @@ dag_to_tidy_graph <- function(dag){
 }
 ```
 
-``` {r}
-plot(dag_to_tidy_graph(dag_s1))
-```
 
-# Graph Metrics
 
-``` {r}
-equivalenceClass(dag_s1) |> plot() # This is Markov Equivalence if the same 
-adjustmentSets(dag_s1)
-igraph::is_isomorphic_to(dag_to_tidy_graph(dag_s1), dag_to_tidy_graph(dag_s1)) # ignores labels
-igraph::subgraph_isomorphisms(dag_to_tidy_graph(dag_s1), dag_to_tidy_graph(dag_s1)) # Finds isomorphic subgraphs
-```
-
-## Graph operations 
-
-### Node contraction
-
-> What “merge nodes” can mean 
-> There are two common interpretations:
-> ### Graph contraction (strict)
-> Take two nodes and fuse them into a single new node.
-> All edges incident on either node are redirected to the new node.
-> Self-loops are usually removed.
-> ### Semantic merging in a causal model (coarsening variables)
-> Conceptually treating two variables as indistinguishable, e.g. merging two survey questions into one construct.
-> Same structural effect, but carries causal meaning (you’re collapsing state space).
+## Tidy graphs
 
 ``` {r}
 tdag_s1 <- dag_to_tidy_graph(dag_s1)
@@ -474,7 +503,7 @@ tdag_s6 <- dag_to_tidy_graph(dag_s6)
 tdag_s7 <- dag_to_tidy_graph(dag_s7)
 tdag_s8 <- dag_to_tidy_graph(dag_s8)
 
-tdag_s1 %N>% as_tibble()
+# tdag_s1 %N>% as_tibble()
 ```
 
 
@@ -557,39 +586,156 @@ g_get_adjustment_sets <- function(g, exposure = "S.Kn", outcome = "Grade") {
   as.list(sets)
 }
 
-g_get_adjustment_sets(tdag_s3)
-
-g_summary_metrics(tdag_s2)
-```
-
-``` {r}
-plot(tdag_s2)
-plot(g_merge_nodes(tdag_s2, c("H.AI.good" = "H.AI", "H.AI.evil" = "H.AI")))
-```
-
-``` {r}
-
-
-
-
-
-tdag_s2 %N>%
-    mutate(
-        degree_in = centrality_degree(mode = "in"),
-        degree_out = centrality_degree(mode = "out"),
-        betweenness = centrality_betweenness(), # Fraction of shortest paths between all node pairs that pass through the node
-        centrality_eigen = centrality_eigen(scale = TRUE), # Node is important if it is connected to other important nodes
-        centrality_pagerank = centrality_pagerank() # probability - sum to 1
-    )
-
+# g_get_adjustment_sets(tdag_s3)
+# 
+# g_summary_metrics(tdag_s2)
 ```
 
 
 
 
 
-# Summarising a grpah:
+
+# Summarising a graph:
 
 Ideas:
-- Complexity
-- Complexity of adjustment sets
+- Complexity of graph 
+- Complexity of adjustment sets? - might be better as comparison
+
+# Compare graphs
+
+Mega all-joined graph with no analogies / subsets
+Secondary simple one that is compressed into superset nodes
+
+``` {r}
+get_node_group <- function(v) {
+    case_when(
+        # Course data - Str, LMS --------------
+        v == "CD" ~ "CD.Str", # was blending LMS and Str, but original graph was more about structure
+        str_detect(v, "CD\\.LMS") ~ "CD.LMS",
+        v == "CD.Att" ~ "CD.Att",
+        v == "CD.Str" ~ "CD.Str",
+        # Grade data --------------------------
+        str_detect(v, "Grade") ~ "Grade",
+        # Kinds of help -----------------------
+        # - - - Help from teacher or tutor
+        v == "H" ~ "H.Tut", # closest match for the only broad category one
+        v == "H.Tut" ~ "H.Tut",
+        v == "H.Ment" ~ "H.Tut",
+        v == "H.Tut.Fb" ~ "H.Tut",
+        # - - - Help from peers
+        v == "H.Peer" ~ "H.Peer",
+        # - - - Help from AI (good or bad usage)
+        str_detect(v, "H\\.AI\\.evil") ~ "H.AI.evil",
+        str_detect(v, "H\\.AI") ~ "H.AI.good",
+        # - - - Other nefarious help (i.e. cheating)
+        v == "H.other.evil" ~ "H.Cheat",
+        # Learning Design --------------------
+        str_detect(v, "^LD") ~ "LD",
+        # Student activity -------------------
+        str_detect(v, "^S\\.Act") ~ "S.Act",
+        # Student attributes (generally unchangable) ---
+        str_detect(v, "^S\\.Att") ~ "S.Att",
+        # Student metacognitive capability (metacognition)
+        str_detect(v, "^S\\.Cp") ~ "S.Cp",
+        # Student emotion / motivation
+        str_detect(v, "^S\\.Aff") ~ "S.EM",
+        # Student knowledge (cognition)
+        v == "S.Kn.Prior" ~ "S.Kn.Prior", # Prior knowledge treated as it's own node
+        str_detect(v, "^S\\.Kn") ~ "S.Kn",
+        # Teacher knowledge (cognition)
+        str_detect(v, "^T\\.Kn") ~ "T.Kn",
+        # Teacher capabilities (metacognition)
+        str_detect(v, "^T\\.Cp") ~ "T.Cp",
+        # Teacher emotion / motivation
+        str_detect(v, "^T\\.Aff") ~ "T.EM",
+        # Teacher actions / decisions
+        str_detect(v, "^T\\.Act") ~ "T.Act",
+        TRUE ~ v
+        
+    )
+}
+
+```
+
+``` {r}
+library(ggraph)
+
+merged_edges <- g_edgelist(tdag_s1) |> 
+    bind_rows(g_edgelist(tdag_s2)) |> 
+    bind_rows(g_edgelist(tdag_s3)) |> 
+    bind_rows(g_edgelist(tdag_s4)) |> 
+    bind_rows(g_edgelist(tdag_s5)) |> 
+    bind_rows(g_edgelist(tdag_s6)) |> 
+    bind_rows(g_edgelist(tdag_s7)) |> 
+    bind_rows(g_edgelist(tdag_s8)) |> 
+    count(from, to) |> ungroup() |> rename(edge_w = n)
+
+merged_nodes <- tdag_s1 %N>% as_tibble() |> 
+    bind_rows(tdag_s2 %N>% as_tibble()) |> 
+    bind_rows(tdag_s3 %N>% as_tibble()) |> 
+    bind_rows(tdag_s4 %N>% as_tibble()) |> 
+    bind_rows(tdag_s5 %N>% as_tibble()) |> 
+    bind_rows(tdag_s6 %N>% as_tibble()) |> 
+    bind_rows(tdag_s7 %N>% as_tibble()) |> 
+    bind_rows(tdag_s8 %N>% as_tibble()) |> 
+    count(name) |> ungroup() |> rename(node_w = n) |> 
+    mutate(node_group = get_node_group(name)) |> 
+    mutate(node_broad_group = str_extract(node_group, "^.{1}"))
+
+# cognitive, metacognitive, emotion / motivation, collaboration
+merged_all_graph <- tbl_graph(nodes = merged_nodes, edges = merged_edges)
+
+# View(merged_nodes |> arrange(name))
+
+# this needs work
+merged_all_graph_layout <- create_layout(merged_all_graph, layout = "sugiyama")
+merged_all_graph_layout_adjusted <- 
+    merged_all_graph_layout |> 
+    mutate(
+        # x = if_else(name == "Post.Fb",x + 20,x),
+        y = if_else(name == "Post.Fb",y + 4,y)
+           )
+
+ggraph(graph = merged_all_graph_layout_adjusted) + # great layout for DAGs
+    geom_edge_link(aes(alpha = edge_w), 
+        arrow = arrow(length = unit(2, 'mm')),
+        start_cap = circle(3, 'mm'),
+                   end_cap = circle(3, 'mm')) +
+    geom_node_point(aes(colour = node_broad_group, size = node_w)) +
+    # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
+    theme_graph() +
+    ggsci::scale_color_frontiers() +
+    scale_alpha_continuous(range = c(0.3,1)) +
+    theme(legend.position = "none")
+
+
+ggraph_with_layout <- function(g, lyt = merged_all_graph_layout_adjusted) {
+    create_layout(g, layout = "sugiyama") |> 
+        left_join(lyt |> select(x,y,name,node_group,node_broad_group,node_w), by = "name",
+                  suffix = c(".default", "")) |> 
+        ggraph() +
+        geom_edge_link(alpha = 0.8,
+            arrow = arrow(length = unit(2, 'mm')),
+            start_cap = circle(3, 'mm'),
+            end_cap = circle(3, 'mm')) +
+        geom_node_point(aes(colour = node_broad_group, size = node_w)) +
+    ggsci::scale_color_frontiers() +
+        # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
+        theme_graph() +
+        scale_alpha_continuous(range = c(0.3,1)) +
+        theme(legend.position = "none")
+}
+
+p1 <- ggraph_with_layout(tdag_s1)
+p2 <- ggraph_with_layout(tdag_s2)
+p3 <- ggraph_with_layout(tdag_s3)
+p4 <- ggraph_with_layout(tdag_s4)
+p5 <- ggraph_with_layout(tdag_s5)
+p6 <- ggraph_with_layout(tdag_s6)
+p7 <- ggraph_with_layout(tdag_s7)
+p8 <- ggraph_with_layout(tdag_s8)
+
+
+
+```
