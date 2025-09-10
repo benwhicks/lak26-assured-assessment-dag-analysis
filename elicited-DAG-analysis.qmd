@@ -1,6 +1,9 @@
 ---
 title: "elicited-dag-analysis"
-format: html
+format: 
+    html:
+        default-image-extension: svg
+        code-fold: true
 ---
 
 # Sessions
@@ -160,7 +163,7 @@ T.Cp.Inst -> S.Kn
 # S.Act - Student activity, doing the work. Was "S: Course Materials" on graph
 # H.Tut - Help from the tutor
 # H.SubC - Help from the subject coordinator
-# S.Perf - Student performance on the task
+# S.Act.Perf - Student performance on the task
 # S.Cp.Aca - student academic skill
 
 dag_s3 <- dagitty('dag S3 {
@@ -174,27 +177,27 @@ LD.Task [pos="-1.245,-0.050"]
 S.Act [pos="-0.621,-0.571"]
 S.Kn [exposure,pos="-0.706,-0.147"]
 S.Cp.Aca [pos="0.305,0.083"]
-S.Perf [pos="-0.660,0.370"]
+S.Act.Perf [pos="-0.660,0.370"]
 T.Act.UseAI [pos="-0.905,-0.032"]
 T.Kn.AI [pos="-1.380,0.414"]
 T.Kn.Ass [pos="-1.720,0.137"]
 T.Kn.Sub [pos="-1.301,-0.830"]
 T.Cp.KnStu [pos="-1.638,-0.366"]
 H.AI -> H.Tut
-H.AI -> S.Perf
+H.AI -> S.Act.Perf
 H.Peer -> CD.LMS
 H.Peer -> S.Kn
 H.Peer -> S.Cp.Aca
 H.Tut -> CD.LMS
 H.Tut -> S.Kn
 LD.Task -> CD.Str
-LD.Task -> S.Perf
+LD.Task -> S.Act.Perf
 S.Act -> CD.LMS
 S.Act -> S.Kn
-S.Kn -> S.Perf
-S.Cp.Aca -> S.Perf
-S.Perf -> Grade
-S.Perf -> H.Tut
+S.Kn -> S.Act.Perf
+S.Cp.Aca -> S.Act.Perf
+S.Act.Perf -> Grade
+S.Act.Perf -> H.Tut
 T.Act.UseAI -> LD.Task
 T.Kn.AI -> LD.Task
 T.Kn.Ass -> LD.Task
@@ -330,14 +333,14 @@ H.AI.evil [pos="-0.176,-0.305"]
 H.AI.good [pos="-0.111,-0.751"]
 LD.AIguide [pos="0.223,-0.607"]
 LD.Task [pos="-0.817,-0.916"]
-Post.Fb [pos="-1.366,-0.032"]
+S.Act.Fb.Post [pos="-1.366,-0.032"]
 S.Act [pos="-0.617,-0.485"]
 S.Act.Fb [pos="-0.454,-0.740"]
 S.Att.Eq [pos="-1.275,-1.024"]
 S.Kn [exposure,pos="-0.853,-0.690"]
 S.Cp.Aca [pos="-1.000,-0.039"]
 CD.Str -> LD.Task
-Grade -> Post.Fb
+Grade -> S.Act.Fb.Post
 H -> Grade
 H -> H.AI.evil
 H -> S.Cp.Aca
@@ -348,8 +351,8 @@ LD.AIguide -> H.AI.evil
 LD.AIguide -> H.AI.good
 LD.Task -> S.Kn
 LD.Task <-> S.Att.Eq
-Post.Fb -> S.Kn
-Post.Fb -> S.Cp.Aca
+S.Act.Fb.Post -> S.Kn
+S.Act.Fb.Post -> S.Cp.Aca
 S.Act -> Grade
 S.Act -> S.Act.Fb
 S.Act.Fb -> H.AI.evil
@@ -481,6 +484,7 @@ S.Kn -> Grade
 dag_to_tidy_graph <- function(dag){
     # Extract edges
     edges <- as.data.frame( dagitty::edges(dag) )
+    edges$edge_w = 1
     nodes <- tibble(name = unique(c(edges$v, edges$w)))
 
     # Build tidygraph
@@ -681,7 +685,7 @@ merged_nodes <- tdag_s1 %N>% as_tibble() |>
     bind_rows(tdag_s8 %N>% as_tibble()) |> 
     count(name) |> ungroup() |> rename(node_w = n) |> 
     mutate(node_group = get_node_group(name)) |> 
-    mutate(node_broad_group = str_extract(node_group, "^.{1}"))
+    mutate(node_broad_group = str_extract(node_group, "^.{1}") |> factor())
 
 # cognitive, metacognitive, emotion / motivation, collaboration
 merged_all_graph <- tbl_graph(nodes = merged_nodes, edges = merged_edges)
@@ -693,49 +697,171 @@ merged_all_graph_layout <- create_layout(merged_all_graph, layout = "sugiyama")
 merged_all_graph_layout_adjusted <- 
     merged_all_graph_layout |> 
     mutate(
-        # x = if_else(name == "Post.Fb",x + 20,x),
-        y = if_else(name == "Post.Fb",y + 4,y)
+        # x = if_else(name == "S.Post.Fb",x + 20,x),
+        y = if_else(name == "S.Act.Fb.Post",y + 4,y)
            )
 
-ggraph(graph = merged_all_graph_layout_adjusted) + # great layout for DAGs
-    geom_edge_link(aes(alpha = edge_w), 
-        arrow = arrow(length = unit(2, 'mm')),
-        start_cap = circle(3, 'mm'),
-                   end_cap = circle(3, 'mm')) +
-    geom_node_point(aes(colour = node_broad_group, size = node_w)) +
-    # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
-    theme_graph() +
-    ggsci::scale_color_frontiers() +
-    scale_alpha_continuous(range = c(0.3,1)) +
-    theme(legend.position = "none")
-
-
-ggraph_with_layout <- function(g, lyt = merged_all_graph_layout_adjusted) {
-    create_layout(g, layout = "sugiyama") |> 
-        left_join(lyt |> select(x,y,name,node_group,node_broad_group,node_w), by = "name",
-                  suffix = c(".default", "")) |> 
+plot_fine_graph_from_layout <- function(lyt) {
+    lyt |> 
         ggraph() +
-        geom_edge_link(alpha = 0.8,
+        geom_edge_fan(aes(alpha = edge_w), strength = 0.2,
             arrow = arrow(length = unit(2, 'mm')),
             start_cap = circle(3, 'mm'),
             end_cap = circle(3, 'mm')) +
         geom_node_point(aes(colour = node_broad_group, size = node_w)) +
-    ggsci::scale_color_frontiers() +
+        ggsci::scale_color_npg(drop = FALSE) +
         # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
         theme_graph() +
+        scale_edge_alpha_continuous(range = c(0.15,0.8)) +
         scale_alpha_continuous(range = c(0.3,1)) +
-        theme(legend.position = "none")
+        theme(legend.position = "none") +
+        xlim(c(-8, 151)) +
+        ylim(c(1.5, 13.5))
 }
 
-p1 <- ggraph_with_layout(tdag_s1)
-p2 <- ggraph_with_layout(tdag_s2)
-p3 <- ggraph_with_layout(tdag_s3)
-p4 <- ggraph_with_layout(tdag_s4)
-p5 <- ggraph_with_layout(tdag_s5)
-p6 <- ggraph_with_layout(tdag_s6)
-p7 <- ggraph_with_layout(tdag_s7)
-p8 <- ggraph_with_layout(tdag_s8)
+g_plot_fine <- function(g, lyt = merged_all_graph_layout_adjusted) {
+    create_layout(g, layout = "sugiyama") |> 
+        left_join(lyt |> select(x,y,name,node_group,node_broad_group,node_w), by = "name",
+                  suffix = c(".default", "")) |> 
+        plot_fine_graph_from_layout()
+    
+}
+
+pAllFine <- merged_all_graph |> 
+    g_plot_fine()
+
+pAllFine
+
+ggsave("dag_merged_fine.svg", pAllFine, width = 6, height = 6)
+```
 
 
+``` {r}
+p1 <- g_plot_fine(tdag_s1)
+p2 <- g_plot_fine(tdag_s2)
+p3 <- g_plot_fine(tdag_s3)
+p4 <- g_plot_fine(tdag_s4)
+p5 <- g_plot_fine(tdag_s5)
+p6 <- g_plot_fine(tdag_s6)
+p7 <- g_plot_fine(tdag_s7)
+p8 <- g_plot_fine(tdag_s8)
 
+ggsave("dag_s1_fine.svg", p1, width = 6, height = 6)
+ggsave("dag_s2_fine.svg", p2, width = 6, height = 6)
+ggsave("dag_s3_fine.svg", p3, width = 6, height = 6)
+ggsave("dag_s4_fine.svg", p4, width = 6, height = 6)
+ggsave("dag_s5_fine.svg", p5, width = 6, height = 6)
+ggsave("dag_s6_fine.svg", p6, width = 6, height = 6)
+ggsave("dag_s7_fine.svg", p7, width = 6, height = 6)
+ggsave("dag_s8_fine.svg", p8, width = 6, height = 6)
+```
+
+``` {r}
+p1
+p2
+p3
+p4
+p5
+p6
+p7
+p8
+```
+
+``` {r}
+library(patchwork)
+pAll <- (p1 | p2 | p3 | p4) / (p5 | p6 | p7 | p8)
+pAll
+ggsave("dags_All_fine.svg", pAll, width = 18, height = 9)
+```
+
+# Coursen graphs
+
+
+``` {r}
+coursen_dag <- function(g){
+    new_nodes <- g %N>%
+        as_tibble() |> 
+        mutate(name = get_node_group(name),
+               node_broad_group = factor(str_extract(name, "^.{1}"))) |> 
+        count(name, node_broad_group) |> 
+        rename(node_w = n)
+    
+    new_edges <- g |> 
+        g_edgelist() |> 
+    mutate(across(from:to, get_node_group)) |> 
+    count(from, to) |> 
+    rename(edge_w = n)
+    
+    tbl_graph(nodes = new_nodes, edges = new_edges)
+}
+
+merged_course_layout <- 
+    merged_all_graph |> 
+    coursen_dag() |> 
+    create_layout(layout = "sugiyama") |> 
+    mutate(
+        x = case_when(
+            name == "CD.Att" ~ 18.5,
+            name == "T.WrkLd" ~ x - 5,
+            name == "H.AI.good" ~ 27,
+            TRUE ~ x),
+        y = case_when(
+            name == "CD.Att" ~ y + 1,
+            name == "Grade" ~ y - 2.5,
+            name == "CD.Str" ~ 3,
+            name == "S.EM" ~ 5,
+            TRUE ~ y)
+           )
+
+course_plot_from_layout <- function(lyt) {
+    lyt |> 
+        ggraph() +
+        geom_edge_fan(aes(alpha = edge_w), strength = 0.2,
+            arrow = arrow(length = unit(2, 'mm')),
+            start_cap = circle(3, 'mm'),
+            end_cap = circle(3, 'mm')) +
+        geom_node_point(aes(colour = node_broad_group, size = node_w)) +
+        ggsci::scale_color_npg(drop = FALSE) +
+        # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
+        theme_graph() +
+        scale_edge_alpha_continuous(range = c(0.15,0.8)) +
+        scale_alpha_continuous(range = c(0.2,0.6)) +
+        theme(legend.position = "none") +
+        xlim(c(10, 53)) +
+        ylim(c(0, 12.5))
+}
+
+g_plot_course <- function(g, lyt = merged_course_layout) {
+    create_layout(g, layout = "sugiyama") |> 
+        left_join(lyt |> select(x,y,name, node_broad_group,node_w), by = "name",
+                  suffix = c(".default", "")) |> 
+    course_plot_from_layout()    
+}
+
+pCourseMerged <- merged_course_layout |> 
+    course_plot_from_layout()
+ggsave("dag_merged_course.svg", pCourseMerged, , width = 6, height = 6)
+```
+
+
+Note the appearance of feedback loops - these are between S.Cp and S.Kn, but also S.Cp and H.AI.evil. These metacognitive skills are clearly seen as important feedback processes in this system.
+
+``` {r}
+pCourseMerged + geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5)
+```
+
+``` {r}
+p1course <- coursen_dag(tdag_s1) |> g_plot_course()
+p2course <- coursen_dag(tdag_s2) |> g_plot_course()
+p3course <- coursen_dag(tdag_s3) |> g_plot_course()
+p4course <- coursen_dag(tdag_s4) |> g_plot_course()
+p5course <- coursen_dag(tdag_s5) |> g_plot_course()
+p6course <- coursen_dag(tdag_s6) |> g_plot_course()
+p7course <- coursen_dag(tdag_s7) |> g_plot_course()
+p8course <- coursen_dag(tdag_s8) |> g_plot_course()
+
+pAllcourse <- (p1course | p2course | p3course | p4course) / (p5course | p6course | p7course | p8course)
+ggsave("dags_all_course.svg", pAllcourse, width = 18, height = 9)
+
+pAllcourse
 ```
