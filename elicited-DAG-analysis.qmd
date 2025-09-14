@@ -1,14 +1,19 @@
 ---
 title: "elicited-dag-analysis"
+execute:
+  dev: svglite
 format: 
     html:
-        default-image-extension: svg
         code-fold: true
         warning: false
         message: false
+        fig-format: svg
 ---
 
 ``` {r library-load}
+options(device = svglite::svglite)
+
+library(svglite)
 library(tidyverse)
 library(dagitty)
 library(tidygraph)
@@ -1286,6 +1291,63 @@ all_nodes_with_metrics <- g_node_metrics(tdag_s1) |>
     ) 
 ```
 
+Idea: can we get each nodes path length to a measurable (downstream / descendant) node?
+
+``` {r}
+g_min_distance_to_node <- function(g, node) {
+    g %N>%
+        mutate(dist_to = distances(as.igraph(.), 
+                                   v = V(as.igraph(.)), 
+                                 to = node, 
+                                 mode = "out")[1,]) |> 
+        as_tibble()
+}
+
+g_distances <- function(g) {
+    d <- 
+        distances(as.igraph(g), mode = "out")
+    row_nodes <- rownames(d)
+    bind_cols(tibble(from = row_nodes),
+              as_tibble(d)) |> 
+        pivot_longer(-from, names_to = "to", values_to = "distance")
+}
+
+g_distancce_to_traced <- function(g) {
+    g_distances(g) |> 
+        inner_join(all_nodes_with_metrics |> 
+                       filter(measurability == "Traced") |> 
+                       select(to = name) |> 
+                       distinct()) |> 
+        group_by(from) |> 
+        summarise(dist_to_trace = min(distance)) |> 
+        rename(name = from)
+}
+
+all_model_nodes_distance_to_traced <- 
+    tibble(Model = "S1") |> bind_cols(g_distancce_to_traced(tdag_s1)) |> 
+    bind_rows(tibble(Model = "S2") |> bind_cols(g_distancce_to_traced(tdag_s2))) |> 
+    bind_rows(tibble(Model = "S3") |> bind_cols(g_distancce_to_traced(tdag_s3))) |> 
+    bind_rows(tibble(Model = "S4") |> bind_cols(g_distancce_to_traced(tdag_s4))) |> 
+    bind_rows(tibble(Model = "S5") |> bind_cols(g_distancce_to_traced(tdag_s5))) |> 
+    bind_rows(tibble(Model = "S6") |> bind_cols(g_distancce_to_traced(tdag_s6))) |> 
+    bind_rows(tibble(Model = "S7") |> bind_cols(g_distancce_to_traced(tdag_s7))) |> 
+    bind_rows(tibble(Model = "S8") |> bind_cols(g_distancce_to_traced(tdag_s8))) 
+
+all_nodes_median_dist_to_traded <- 
+    all_model_nodes_distance_to_traced |> 
+    group_by(name) |> 
+    summarise(m_dist_to_trace = median(dist_to_trace))
+
+all_node_groups_distance_to_traced <- 
+    all_model_nodes_distance_to_traced |> 
+    mutate(node_group = code_node_group(name)) |> 
+    group_by(Model, node_group) |> 
+    summarise(m_dist_to_trace = mean(dist_to_trace))
+
+
+
+```
+
 ## Joining metrics and session data
 
 ``` {r}
@@ -1809,8 +1871,80 @@ p_top_node_pagerank_no_outcome
 ggsave("figures/FIG--node_pagerank_no_outcome.png", p_top_node_pagerank_no_outcome, width = 10, height = 4, dpi = 600)
 ```
 
+``` {r}
+# Pagerank no outcome - dist to traced version
+
+d_ng_trace_importance <- 
+    all_node_groups_aggregated_metrics |> 
+    inner_join(all_node_groups_distance_to_traced, by = c("Model", "node_group")) |> 
+    filter(node_group != "Grade.Outcome") |>
+    inner_join(node_group_nice_name, by = "node_group") |>
+    mutate(node_group = nice_name) |>
+    group_by(node_group) |>
+    mutate(p_traced_group = mean(m_dist_to_trace)) |>
+    ungroup() |> 
+    mutate(node_group = fct_reorder(node_group, pagerank_no_outcome)) |> 
+    arrange(desc(node_group)) |> 
+    filter(n > 3) # need at least half the models with node group
+
+
+p_top_node_pagerank_no_outcome_trace_dist <- 
+    d_ng_trace_importance |> 
+    # arrange(Model, node_group) |> 
+    ggplot(aes(x = pagerank_no_outcome, y = node_group)) +
+    geom_boxplot(aes(fill = p_traced_group), colour = "lightgray", size = 0.4, alpha = 0.7) +
+    # geom_line(aes(x = pagerank_no_outcome, y = node_group, group = Model), alpha = 0.6) +
+    geom_point(aes(colour = m_dist_to_trace), alpha = 0.9) +
+    scale_color_gradient2(
+        low = friendly_pals$contrast_three[[3]], 
+        mid = friendly_pals$contrast_three[[2]],
+        high = friendly_pals$contrast_three[[1]],
+        midpoint = mean(range(d_ng_trace_importance$m_dist_to_trace)),
+                         breaks = range(d_ng_trace_importance$m_dist_to_trace),
+                         labels = c("Traced","Untraced"),
+                         name = "",
+        guide = guide_colorbar(reverse = TRUE)
+        ) +
+    scale_fill_gradient2(
+        midpoint = mean(range(d_ng_trace_importance$m_dist_to_trace)),
+        low = friendly_pals$contrast_three[[3]], 
+        mid = friendly_pals$contrast_three[[2]],
+        high = friendly_pals$contrast_three[[1]]
+        ) +
+    theme_minimal() +
+    ylab("Node group") +
+    xlab("Node groups combined Centrality (Pagerank)") +
+    # geom_rug(aes(colour = m_dist_to_trace), alpha = 0.6, sides = "b") +
+    # coord_cartesian(clip = "off") +
+    guides(fill = "none") +
+    theme(legend.position = "right",
+          axis.ticks.y = element_blank(),
+          axis.line.y = element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.grid.minor.y = element_blank())
+
+p_top_node_pagerank_no_outcome_trace_dist
+
+ggsave("figures/FIG--node_pagerank_no_outcome_trace_distance.png", p_top_node_pagerank_no_outcome_trace_dist, 
+       width = 10, 
+       height = 4, 
+       dpi = 600)
+
+d_ng_trace_importance |> 
+    group_by(node_group) |> 
+    summarise(m_dist_to_trace = mean(m_dist_to_trace)) |> 
+    arrange(desc(m_dist_to_trace)) 
+    
+```
+
+Above plot but lines joining models that are like?
+
+
+
+#### Table: Node lists, with types, groups and importance metrics
 
 ``` {r appendix-node-groups-table}
+# could add distance to traced
 node_groups_table <- 
     all_nodes_with_metrics |>
     inner_join(name_node_nice_name, by = "name") |> 
@@ -1819,6 +1953,8 @@ node_groups_table <-
         str_c(nice_name, "*"),
         nice_name
     )) |> 
+    inner_join(node_group_nice_name |> rename(ng_nice_name = nice_name), by = "node_group") |> 
+    mutate(node_group = ng_nice_name) |> 
     group_by(node_type, node_group) |>
     mutate(measurability = case_when(
         all(measurability == "Traced") ~ "Traced",
@@ -1841,7 +1977,8 @@ node_groups_table <-
     #     node_type == "G" ~ "Grade Data",
     #     node_type == "H" ~ "Help"
     # )) |> 
-    arrange(desc(n), desc(pagerank)) 
+    arrange(desc(n), desc(pagerank)) |> 
+    select(node_group, everything())
 
 node_groups_table
 ```
