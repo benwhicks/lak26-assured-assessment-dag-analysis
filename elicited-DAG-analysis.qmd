@@ -1271,7 +1271,11 @@ merged_all_graph_layout_adjusted <-
     mutate(
         # x = if_else(name == "S.Post.Fb",x + 20,x),
         y = if_else(name == "S.Act.Fb.Post",y + 4,y)
-           )
+           ) |> 
+    mutate(
+        x = if_else(name == "S.Act",x + 20,x),
+        y = if_else(name == "S.Act",y - 4,y)
+           ) 
 ptemp <- merged_all_graph_layout_adjusted |> 
     ggraph() +
         geom_edge_fan(aes(alpha = edge_w), strength = 0.2,

@@ -1456,80 +1456,84 @@ window.Quarto = {
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x = if_else(name == "S.Post.Fb",x + 20,x),</span></span>
 <span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="fu">if_else</span>(name <span class="sc">==</span> <span class="st">"S.Act.Fb.Post"</span>,y <span class="sc">+</span> <span class="dv">4</span>,y)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>           )</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>ptemp <span class="ot">&lt;-</span> merged_all_graph_layout_adjusted <span class="sc">|&gt;</span> </span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggraph</span>() <span class="sc">+</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">'mm'</span>), <span class="at">type =</span> <span class="st">"closed"</span>),</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type, <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(ptemp)</span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>x_limits_fine <span class="ot">&lt;-</span> b<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>x.range</span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>y_limits_fine <span class="ot">&lt;-</span> b<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>y.range</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>           ) <span class="sc">|&gt;</span> </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="fu">if_else</span>(name <span class="sc">==</span> <span class="st">"S.Act"</span>,x <span class="sc">+</span> <span class="dv">20</span>,x),</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="fu">if_else</span>(name <span class="sc">==</span> <span class="st">"S.Act"</span>,y <span class="sc">-</span> <span class="dv">4</span>,y)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>           ) </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>ptemp <span class="ot">&lt;-</span> merged_all_graph_layout_adjusted <span class="sc">|&gt;</span> </span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggraph</span>() <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">'mm'</span>), <span class="at">type =</span> <span class="st">"closed"</span>),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type, <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
 <span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>plot_fine_graph_from_layout <span class="ot">&lt;-</span> <span class="cf">function</span>(lyt, <span class="at">weight_nodes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    ppp <span class="ot">&lt;-</span> </span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>        lyt <span class="sc">|&gt;</span> </span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggraph</span>() </span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (weight_nodes) {</span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>        pp <span class="ot">&lt;-</span> ppp <span class="sc">+</span></span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type,</span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>                                <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
-<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">scale_size</span>(<span class="at">name =</span> <span class="st">"point-size"</span>) <span class="sc">+</span></span>
-<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(</span>
-<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>                <span class="at">alpha =</span> edge_p_w <span class="sc">*</span> edge_w <span class="sc">+</span> edge_w, </span>
-<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>                <span class="at">edge_linetype =</span> <span class="fu">factor</span>(switched)), </span>
-<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>                <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
-<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>                <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">'mm'</span>),</span>
-<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>                              <span class="at">type =</span> <span class="st">"closed"</span>),</span>
-<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>                <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
-<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>                <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>))</span>
-<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>        pp <span class="ot">&lt;-</span> ppp <span class="sc">+</span></span>
-<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type)) <span class="sc">+</span></span>
-<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_edge_fan</span>(<span class="at">strength =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>                          <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">'mm'</span>),</span>
-<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">type =</span> <span class="st">"closed"</span>),</span>
-<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>                          <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">1</span>, <span class="st">'mm'</span>),</span>
-<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>                          <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">1</span>, <span class="st">'mm'</span>))</span>
-<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>    pp <span class="sc">+</span></span>
-<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">friendly_pal</span>(<span class="st">"vibrant_seven"</span>), <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
-<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
-<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">0</span>, <span class="at">l =</span> <span class="dv">0</span>, <span class="at">unit =</span> <span class="st">"pt"</span>)) <span class="sc">+</span></span>
-<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(x_limits_fine) <span class="sc">+</span></span>
-<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(y_limits_fine)</span>
-<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a>g_plot_fine <span class="ot">&lt;-</span> <span class="cf">function</span>(g, <span class="at">lyt =</span> merged_all_graph_layout_adjusted, <span class="at">weight_nodes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_layout</span>(g, <span class="at">layout =</span> <span class="st">"sugiyama"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a>        <span class="fu">left_join</span>(lyt <span class="sc">|&gt;</span> <span class="fu">select</span>(x,y,name,node_group,node_type,node_w), <span class="at">by =</span> <span class="st">"name"</span>,</span>
-<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a>                  <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">".default"</span>, <span class="st">""</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a>        <span class="fu">plot_fine_graph_from_layout</span>(<span class="at">weight_nodes =</span> weight_nodes)</span>
-<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb27-73"><a href="#cb27-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-74"><a href="#cb27-74" aria-hidden="true" tabindex="-1"></a>pMergedFineLegend <span class="ot">&lt;-</span> merged_all_graph <span class="sc">|&gt;</span> </span>
-<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>    <span class="fu">g_plot_fine</span>() <span class="sc">+</span> </span>
-<span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
-<span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">size =</span> <span class="st">"none"</span>, <span class="at">edge_width =</span> <span class="st">"none"</span>, <span class="at">alpha =</span> <span class="st">"none"</span>, <span class="at">edge_alpha =</span> <span class="st">"none"</span>,</span>
-<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">nrow =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a>pMergedFineLegend</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(ptemp)</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>x_limits_fine <span class="ot">&lt;-</span> b<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>x.range</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>y_limits_fine <span class="ot">&lt;-</span> b<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>y.range</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>plot_fine_graph_from_layout <span class="ot">&lt;-</span> <span class="cf">function</span>(lyt, <span class="at">weight_nodes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    ppp <span class="ot">&lt;-</span> </span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>        lyt <span class="sc">|&gt;</span> </span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggraph</span>() </span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (weight_nodes) {</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>        pp <span class="ot">&lt;-</span> ppp <span class="sc">+</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type,</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>                                <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>            <span class="fu">scale_size</span>(<span class="at">name =</span> <span class="st">"point-size"</span>) <span class="sc">+</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>                <span class="at">alpha =</span> edge_p_w <span class="sc">*</span> edge_w <span class="sc">+</span> edge_w, </span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>                <span class="at">edge_linetype =</span> <span class="fu">factor</span>(switched)), </span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>                <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>                <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">'mm'</span>),</span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>                              <span class="at">type =</span> <span class="st">"closed"</span>),</span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>                <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>                <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>))</span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>        pp <span class="ot">&lt;-</span> ppp <span class="sc">+</span></span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type)) <span class="sc">+</span></span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_edge_fan</span>(<span class="at">strength =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>                          <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">1</span>, <span class="st">'mm'</span>),</span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">type =</span> <span class="st">"closed"</span>),</span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>                          <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">1</span>, <span class="st">'mm'</span>),</span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>                          <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">1</span>, <span class="st">'mm'</span>))</span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a>    pp <span class="sc">+</span></span>
+<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">friendly_pal</span>(<span class="st">"vibrant_seven"</span>), <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
+<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
+<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a>              <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="at">t =</span> <span class="dv">0</span>, <span class="at">r =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">0</span>, <span class="at">l =</span> <span class="dv">0</span>, <span class="at">unit =</span> <span class="st">"pt"</span>)) <span class="sc">+</span></span>
+<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(x_limits_fine) <span class="sc">+</span></span>
+<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(y_limits_fine)</span>
+<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a>g_plot_fine <span class="ot">&lt;-</span> <span class="cf">function</span>(g, <span class="at">lyt =</span> merged_all_graph_layout_adjusted, <span class="at">weight_nodes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_layout</span>(g, <span class="at">layout =</span> <span class="st">"sugiyama"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-73"><a href="#cb27-73" aria-hidden="true" tabindex="-1"></a>        <span class="fu">left_join</span>(lyt <span class="sc">|&gt;</span> <span class="fu">select</span>(x,y,name,node_group,node_type,node_w), <span class="at">by =</span> <span class="st">"name"</span>,</span>
+<span id="cb27-74"><a href="#cb27-74" aria-hidden="true" tabindex="-1"></a>                  <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">".default"</span>, <span class="st">""</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>        <span class="fu">plot_fine_graph_from_layout</span>(<span class="at">weight_nodes =</span> weight_nodes)</span>
+<span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>pMergedFineLegend <span class="ot">&lt;-</span> merged_all_graph <span class="sc">|&gt;</span> </span>
+<span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">g_plot_fine</span>() <span class="sc">+</span> </span>
+<span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb27-81"><a href="#cb27-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">size =</span> <span class="st">"none"</span>, <span class="at">edge_width =</span> <span class="st">"none"</span>, <span class="at">alpha =</span> <span class="st">"none"</span>, <span class="at">edge_alpha =</span> <span class="st">"none"</span>,</span>
+<span id="cb27-82"><a href="#cb27-82" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">nrow =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb27-83"><a href="#cb27-83" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb27-84"><a href="#cb27-84" aria-hidden="true" tabindex="-1"></a>pMergedFineLegend</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
