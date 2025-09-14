@@ -4,6 +4,8 @@ format:
     html:
         default-image-extension: svg
         code-fold: true
+        warning: false
+        message: false
 ---
 
 ``` {r library-load}
@@ -1243,6 +1245,24 @@ gcm_metrics |>
 
 ## DAG networks
 
+### Edge coherence
+
+
+``` {r}
+tb_edge_coherence <- 
+    edges_with_metrics |> 
+    summarise(
+        n = sum(n),
+        max_n = sum(max_n),
+        aligned = mean(switched == "aligned")
+    ) |> 
+    mutate(edges_included = n / max_n)
+tb_edge_coherence
+```
+
+Generally when two nodes in the model were selected by different participants the same edge was drawn in `r round(100*tb_edge_coherence$edges_included , 2)`% of the time. A handful of potential edges (`r round(100*(1-tb_edge_coherence$aligned),2)`%) were included, but asigned a different direction of causal flow. 
+
+### Merging graphs
 
 ``` {r plotting-merged-graph}
 merged_all_graph_layout <- create_layout(merged_all_graph, layout = "sugiyama")
@@ -1329,7 +1349,7 @@ pMergedFineLegendTall <- merged_all_graph |>
     g_plot_fine() + 
     theme(legend.position = "right") +
     guides(size = "none", alpha = "none", edge_alpha = "none", edge_width = "none",
-           color = guide_legend(ncol = 1)) +
+           color = guide_legend(ncol = 2)) +
     theme(legend.title = element_blank())
 pMergedFine <- pMergedFineLegend +
     theme(legend.position = "none")
@@ -1367,6 +1387,37 @@ p5 <- g_plot_fine(tdag_s5, weight_nodes = FALSE)
 p6 <- g_plot_fine(tdag_s6, weight_nodes = FALSE)
 p7 <- g_plot_fine(tdag_s7, weight_nodes = FALSE)
 p8 <- g_plot_fine(tdag_s8, weight_nodes = FALSE)
+
+# Plot border 
+    # theme(
+    #   plot.background = element_rect(
+    #     colour = "grey70", 
+    #     fill = NA,
+    #     linewidth = 1
+    #   )
+    # )
+
+p2peerHighlight <- p2 + 
+    geom_node_point(size = 3, shape = 1, alpha = 0.6,
+    data = p2$data |>  filter(name == "H.Peer")) +
+    geom_node_point(size = 5, shape = 1, alpha = 0.3,
+    data = p2$data |>  filter(name == "H.Peer")) +
+    geom_node_point(size = 7, shape = 1, alpha = 0.1,
+    data = p2$data |>  filter(name == "H.Peer")) 
+p3peerHighlight <- p3 + 
+    geom_node_point(size = 3, shape = 1, alpha = 0.6,
+    data = p3$data |>  filter(name == "H.Peer")) +
+    geom_node_point(size = 5, shape = 1, alpha = 0.3,
+    data = p3$data |>  filter(name == "H.Peer")) +
+    geom_node_point(size = 7, shape = 1, alpha = 0.1,
+    data = p3$data |>  filter(name == "H.Peer")) 
+p4peerHighlight <- p4 +
+    geom_node_point(size = 3, shape = 1, alpha = 0.6,
+    data = p4$data |>  filter(name == "H.Peer")) +
+    geom_node_point(size = 5, shape = 1, alpha = 0.3,
+    data = p4$data |>  filter(name == "H.Peer")) +
+    geom_node_point(size = 7, shape = 1, alpha = 0.1,
+    data = p4$data |>  filter(name == "H.Peer")) 
 # 
 # ggsave("dag_s1_fine.svg", p1, width = 6, height = 6)
 # ggsave("dag_s2_fine.svg", p2, width = 6, height = 6)
@@ -1384,8 +1435,10 @@ pAllFine
 ggsave("dags_All_fine.svg", pAllFine, width = 18, height = 9)
 ```
 
+#### Building main DAG figure
+
 ``` {r}
-pAll3by3 <- (p7| p1 | p2) / (p5 | p4 | p8) / (p3 | leg_tall_plot | p6)
+pAll3by3 <- (p2peerHighlight | p5 | p7) / (p4peerHighlight | p1 | p8) / (p3peerHighlight | leg_tall_plot | p6)
 pFineTogetherLabelled <- pAll3by3 / pMergedFineLabelled + plot_layout(heights = c(1,1,1,3))
 pFineTogether <- pAll3by3 / pMergedFine + plot_layout(heights = c(1,1,1,3))
 pFineTogetherLabelled
