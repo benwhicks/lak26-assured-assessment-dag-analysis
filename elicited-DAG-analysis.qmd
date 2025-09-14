@@ -1438,8 +1438,30 @@ ggsave("dags_All_fine.svg", pAllFine, width = 18, height = 9)
 #### Building main DAG figure
 
 ``` {r}
-pAll3by3 <- (p2peerHighlight | p5 | p7) / (p4peerHighlight | p1 | p8) / (p3peerHighlight | leg_tall_plot | p6)
-pFineTogetherLabelled <- pAll3by3 / pMergedFineLabelled + plot_layout(heights = c(1,1,1,3))
+library(grid)
+tag_plot <- function(p, tag, x = 0, y = 0.9, fontsize = 8) {
+  p + annotation_custom(
+    grid::textGrob(tag, x = x, y = y, 
+                   hjust = 0, vjust = 1, gp = gpar(fontsize = fontsize))
+  )
+}
+
+pAll3by3 <- 
+    (
+        tag_plot(p2peerHighlight,"(a)")| 
+            tag_plot(p5, "(b)") | 
+            tag_plot(p7, "(c)")) / 
+    (
+        tag_plot(p4peerHighlight, "(d)") | 
+            tag_plot(p1, "(e)") | 
+            tag_plot(p8, "(f)")) / 
+    (
+        tag_plot(p3peerHighlight, "(g)") | 
+            leg_tall_plot | 
+            tag_plot(p6, "(h)")) 
+     
+   pAll3by3
+pFineTogetherLabelled <- pAll3by3 / tag_plot(pMergedFineLabelled, "(i)") + plot_layout(heights = c(1,1,1,3))
 pFineTogether <- pAll3by3 / pMergedFine + plot_layout(heights = c(1,1,1,3))
 pFineTogetherLabelled
 ggsave("dags_fine_all_and_merged.png", pFineTogether, width = 9, height = 10, dpi = 900)
