@@ -1602,36 +1602,88 @@ window.Quarto = {
 <span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   )</span></span>
 <span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># )</span></span>
 <span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>p2peerHighlight <span class="ot">&lt;-</span> p2 <span class="sc">+</span> </span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) </span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>p3peerHighlight <span class="ot">&lt;-</span> p3 <span class="sc">+</span> </span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) </span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>p4peerHighlight <span class="ot">&lt;-</span> p4 <span class="sc">+</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>hl_text_size <span class="ot">&lt;-</span> <span class="fl">1.5</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>hl_text_alpha <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>p2peerHighlight <span class="ot">&lt;-</span> p2 <span class="sc">+</span> </span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">colour =</span> node_type), </span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size =</span> hl_text_size , <span class="at">alpha =</span> hl_text_alpha,</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p2<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>), <span class="at">repel =</span> T) </span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>p3peerHighlight <span class="ot">&lt;-</span> p3 <span class="sc">+</span> </span>
 <span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
-<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
 <span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
-<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
 <span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
-<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) </span>
-<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s1_fine.svg", p1, width = 6, height = 6)</span></span>
-<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s2_fine.svg", p2, width = 6, height = 6)</span></span>
-<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s3_fine.svg", p3, width = 6, height = 6)</span></span>
-<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s4_fine.svg", p4, width = 6, height = 6)</span></span>
-<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s5_fine.svg", p5, width = 6, height = 6)</span></span>
-<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s6_fine.svg", p6, width = 6, height = 6)</span></span>
-<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s7_fine.svg", p7, width = 6, height = 6)</span></span>
-<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s8_fine.svg", p8, width = 6, height = 6)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">colour =</span> node_type), </span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size =</span> hl_text_size , <span class="at">alpha =</span> hl_text_alpha,</span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p3<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>        <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>), <span class="at">repel =</span> T) </span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>p4peerHighlight <span class="ot">&lt;-</span> p4 <span class="sc">+</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>)) <span class="sc">+</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">colour =</span> node_type), </span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size =</span> hl_text_size , <span class="at">alpha =</span> hl_text_alpha,</span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p4<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"H.Peer"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>        <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>), <span class="at">repel =</span> T) </span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>p7KnHighlight <span class="ot">&lt;-</span> p7 <span class="sc">+</span></span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p7<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p7<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p7<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">colour =</span> node_type), </span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size =</span> hl_text_size , <span class="at">alpha =</span> hl_text_alpha,</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p7<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>        <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>), <span class="at">repel =</span> T) </span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a>p5KnHighlight <span class="ot">&lt;-</span> p5 <span class="sc">+</span></span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p5<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p5<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
+<span id="cb30-74"><a href="#cb30-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p5<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-75"><a href="#cb30-75" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">colour =</span> node_type), </span>
+<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size =</span> hl_text_size , <span class="at">alpha =</span> hl_text_alpha,</span>
+<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p5<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a>        <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>), <span class="at">repel =</span> T) </span>
+<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a>p6KnHighlight <span class="ot">&lt;-</span> p6 <span class="sc">+</span></span>
+<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>,</span>
+<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p6<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>,</span>
+<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p6<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">shape =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
+<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p6<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>))) <span class="sc">+</span></span>
+<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">colour =</span> node_type), </span>
+<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a>                   <span class="at">size =</span> hl_text_size , <span class="at">alpha =</span> hl_text_alpha,</span>
+<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> p6<span class="sc">$</span>data <span class="sc">|&gt;</span>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Kn"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a>        <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>), <span class="at">repel =</span> T) </span>
+<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s1_fine.svg", p1, width = 6, height = 6)</span></span>
+<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s2_fine.svg", p2, width = 6, height = 6)</span></span>
+<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s3_fine.svg", p3, width = 6, height = 6)</span></span>
+<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s4_fine.svg", p4, width = 6, height = 6)</span></span>
+<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s5_fine.svg", p5, width = 6, height = 6)</span></span>
+<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s6_fine.svg", p6, width = 6, height = 6)</span></span>
+<span id="cb30-99"><a href="#cb30-99" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s7_fine.svg", p7, width = 6, height = 6)</span></span>
+<span id="cb30-100"><a href="#cb30-100" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("dag_s8_fine.svg", p8, width = 6, height = 6)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
@@ -1668,18 +1720,21 @@ window.Quarto = {
 <span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>pAll3by3 <span class="ot">&lt;-</span> </span>
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    (</span>
 <span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p2peerHighlight,<span class="st">"(a)"</span>)<span class="sc">|</span> </span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p5, <span class="st">"(b)"</span>) <span class="sc">|</span> </span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p7, <span class="st">"(c)"</span>)) <span class="sc">/</span> </span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p8, <span class="st">"(b)"</span>) <span class="sc">|</span> </span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p7KnHighlight, <span class="st">"(c)"</span>)) <span class="sc">/</span> </span>
 <span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    (</span>
 <span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p4peerHighlight, <span class="st">"(d)"</span>) <span class="sc">|</span> </span>
 <span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p1, <span class="st">"(e)"</span>) <span class="sc">|</span> </span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p8, <span class="st">"(f)"</span>)) <span class="sc">/</span> </span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p5KnHighlight, <span class="st">"(f)"</span>)) <span class="sc">/</span> </span>
 <span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    (</span>
 <span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p3peerHighlight, <span class="st">"(g)"</span>) <span class="sc">|</span> </span>
 <span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>            leg_tall_plot <span class="sc">|</span> </span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p6, <span class="st">"(h)"</span>)) </span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p6KnHighlight, <span class="st">"(h)"</span>)) </span>
 <span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>   pAll3by3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> <span class="fu">tag_plot</span>(pMergedFineLabelled, <span class="st">"(i)"</span>) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>pFineTogether <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> pMergedFine <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1690,99 +1745,86 @@ window.Quarto = {
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> <span class="fu">tag_plot</span>(pMergedFineLabelled, <span class="st">"(i)"</span>) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>pFineTogether <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> pMergedFine <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="elicited-DAG-analysis_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged.png"</span>, pFineTogether, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">900</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged.svg"</span>, pFineTogether, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged_labelled.png"</span>, pFineTogetherLabelled, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">900</span>)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged_labelled.svg"</span>, pFineTogetherLabelled, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged.png"</span>, pFineTogether, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">900</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged.svg"</span>, pFineTogether, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged_labelled.png"</span>, pFineTogetherLabelled, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">900</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_fine_all_and_merged_labelled.svg"</span>, pFineTogetherLabelled, <span class="at">width =</span> <span class="dv">9</span>, <span class="at">height =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>merged_course_layout <span class="ot">&lt;-</span> </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    merged_all_graph <span class="sc">|&gt;</span> </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">g_coursen_dag_by_ng</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_layout</span>(<span class="at">layout =</span> <span class="st">"sugiyama"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="fu">case_when</span>(</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"CD.Att"</span> <span class="sc">~</span> <span class="fl">18.5</span>,</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"T.Aff.WrkLd"</span> <span class="sc">~</span> x <span class="sc">-</span> <span class="dv">5</span>,</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"H.AI.good"</span> <span class="sc">~</span> <span class="dv">27</span>,</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>            <span class="cn">TRUE</span> <span class="sc">~</span> x),</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="fu">case_when</span>(</span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"CD.Att"</span> <span class="sc">~</span> y <span class="sc">+</span> <span class="dv">1</span>,</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"Grade"</span> <span class="sc">~</span> y <span class="sc">-</span> <span class="fl">2.5</span>,</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"CD.Str"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"S.EM"</span> <span class="sc">~</span> <span class="dv">5</span>,</span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>            <span class="cn">TRUE</span> <span class="sc">~</span> y)</span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>           )</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>p_temp <span class="ot">&lt;-</span> merged_course_layout <span class="sc">|&gt;</span> </span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>     <span class="fu">ggraph</span>() <span class="sc">+</span></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">'mm'</span>)),</span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type, <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">friendly_pal</span>(<span class="st">"vibrant_seven"</span>), <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.6</span>)) <span class="sc">+</span></span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) </span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>bc <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(p_temp)</span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>x_limits_course <span class="ot">&lt;-</span> bc<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>x.range</span>
-<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>y_limits_course <span class="ot">&lt;-</span> bc<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>y.range</span>
-<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>course_plot_from_layout <span class="ot">&lt;-</span> <span class="cf">function</span>(lyt) {</span>
-<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>    lyt <span class="sc">|&gt;</span> </span>
-<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggraph</span>() <span class="sc">+</span></span>
-<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
-<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">'mm'</span>)),</span>
-<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
-<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>            <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
-<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type, <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
-<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>        ggsci<span class="sc">::</span><span class="fu">scale_color_npg</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
-<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
-<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.6</span>)) <span class="sc">+</span></span>
-<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(x_limits_course) <span class="sc">+</span></span>
-<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(y_limits_course)</span>
-<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>g_plot_course <span class="ot">&lt;-</span> <span class="cf">function</span>(g, <span class="at">lyt =</span> merged_course_layout) {</span>
-<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_layout</span>(g, <span class="at">layout =</span> <span class="st">"sugiyama"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a>        <span class="fu">left_join</span>(lyt <span class="sc">|&gt;</span> <span class="fu">select</span>(x,y,name, node_type,node_w), <span class="at">by =</span> <span class="st">"name"</span>,</span>
-<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a>                  <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">".default"</span>, <span class="st">""</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb36-59"><a href="#cb36-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">course_plot_from_layout</span>()    </span>
-<span id="cb36-60"><a href="#cb36-60" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb36-61"><a href="#cb36-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-62"><a href="#cb36-62" aria-hidden="true" tabindex="-1"></a>pCourseMerged <span class="ot">&lt;-</span> merged_course_layout <span class="sc">|&gt;</span> </span>
-<span id="cb36-63"><a href="#cb36-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">course_plot_from_layout</span>()</span>
-<span id="cb36-64"><a href="#cb36-64" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dag_merged_course.svg"</span>, pCourseMerged, , <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>merged_course_layout <span class="ot">&lt;-</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    merged_all_graph <span class="sc">|&gt;</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">g_coursen_dag_by_ng</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_layout</span>(<span class="at">layout =</span> <span class="st">"sugiyama"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="fu">case_when</span>(</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"CD.Att"</span> <span class="sc">~</span> <span class="fl">18.5</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"T.Aff.WrkLd"</span> <span class="sc">~</span> x <span class="sc">-</span> <span class="dv">5</span>,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"H.AI.good"</span> <span class="sc">~</span> <span class="dv">27</span>,</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>            <span class="cn">TRUE</span> <span class="sc">~</span> x),</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="fu">case_when</span>(</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"CD.Att"</span> <span class="sc">~</span> y <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"Grade"</span> <span class="sc">~</span> y <span class="sc">-</span> <span class="fl">2.5</span>,</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"CD.Str"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>            name <span class="sc">==</span> <span class="st">"S.EM"</span> <span class="sc">~</span> <span class="dv">5</span>,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>            <span class="cn">TRUE</span> <span class="sc">~</span> y)</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>           )</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>p_temp <span class="ot">&lt;-</span> merged_course_layout <span class="sc">|&gt;</span> </span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>     <span class="fu">ggraph</span>() <span class="sc">+</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">'mm'</span>)),</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type, <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">friendly_pal</span>(<span class="st">"vibrant_seven"</span>), <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.6</span>)) <span class="sc">+</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) </span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>bc <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(p_temp)</span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>x_limits_course <span class="ot">&lt;-</span> bc<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>x.range</span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>y_limits_course <span class="ot">&lt;-</span> bc<span class="sc">$</span>layout<span class="sc">$</span>panel_params[[<span class="dv">1</span>]]<span class="sc">$</span>y.range</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>course_plot_from_layout <span class="ot">&lt;-</span> <span class="cf">function</span>(lyt) {</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>    lyt <span class="sc">|&gt;</span> </span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggraph</span>() <span class="sc">+</span></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_edge_fan</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), <span class="at">strength =</span> <span class="fl">0.2</span>,</span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">'mm'</span>)),</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>            <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> node_type, <span class="at">size =</span> node_w)) <span class="sc">+</span></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>        ggsci<span class="sc">::</span><span class="fu">scale_color_npg</span>(<span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +</span></span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_graph</span>() <span class="sc">+</span></span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_edge_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.15</span>,<span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a>        <span class="fu">scale_alpha_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.6</span>)) <span class="sc">+</span></span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>        <span class="fu">xlim</span>(x_limits_course) <span class="sc">+</span></span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ylim</span>(y_limits_course)</span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>g_plot_course <span class="ot">&lt;-</span> <span class="cf">function</span>(g, <span class="at">lyt =</span> merged_course_layout) {</span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">create_layout</span>(g, <span class="at">layout =</span> <span class="st">"sugiyama"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>        <span class="fu">left_join</span>(lyt <span class="sc">|&gt;</span> <span class="fu">select</span>(x,y,name, node_type,node_w), <span class="at">by =</span> <span class="st">"name"</span>,</span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>                  <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">".default"</span>, <span class="st">""</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">course_plot_from_layout</span>()    </span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a>pCourseMerged <span class="ot">&lt;-</span> merged_course_layout <span class="sc">|&gt;</span> </span>
+<span id="cb35-63"><a href="#cb35-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">course_plot_from_layout</span>()</span>
+<span id="cb35-64"><a href="#cb35-64" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dag_merged_course.svg"</span>, pCourseMerged, , <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Note the appearance of feedback loops - these are between S.Cp and S.Kn, but also S.Cp and H.AI.evil. These metacognitive skills are clearly seen as important feedback processes in this system.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>pCourseMerged <span class="sc">+</span> <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name, <span class="at">size =</span> node_w, <span class="at">alpha =</span> node_w), <span class="at">nudge_x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pCourseMerged <span class="sc">+</span> <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name, <span class="at">size =</span> node_w, <span class="at">alpha =</span> node_w), <span class="at">nudge_x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1795,19 +1837,19 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>p1course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s1) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>p2course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s2) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>p3course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s3) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>p4course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s4) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>p5course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s5) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>p6course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s6) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>p7course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s7) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>p8course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s8) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>pAllcourse <span class="ot">&lt;-</span> (p1course <span class="sc">|</span> p2course <span class="sc">|</span> p3course <span class="sc">|</span> p4course) <span class="sc">/</span> (p5course <span class="sc">|</span> p6course <span class="sc">|</span> p7course <span class="sc">|</span> p8course)</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_all_course.svg"</span>, pAllcourse, <span class="at">width =</span> <span class="dv">18</span>, <span class="at">height =</span> <span class="dv">9</span>)</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>pAllcourse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>p1course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s1) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>p2course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s2) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>p3course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s3) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>p4course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s4) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>p5course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s5) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>p6course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s6) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>p7course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s7) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>p8course <span class="ot">&lt;-</span> <span class="fu">g_coursen_dag_by_ng</span>(tdag_s8) <span class="sc">|&gt;</span> <span class="fu">g_plot_course</span>()</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>pAllcourse <span class="ot">&lt;-</span> (p1course <span class="sc">|</span> p2course <span class="sc">|</span> p3course <span class="sc">|</span> p4course) <span class="sc">/</span> (p5course <span class="sc">|</span> p6course <span class="sc">|</span> p7course <span class="sc">|</span> p8course)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"dags_all_course.svg"</span>, pAllcourse, <span class="at">width =</span> <span class="dv">18</span>, <span class="at">height =</span> <span class="dv">9</span>)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>pAllcourse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1825,86 +1867,86 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>all_node_groups_aggregated_metrics <span class="ot">&lt;-</span> </span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Model, node_group, node_type) <span class="sc">|&gt;</span> </span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">p_traced =</span> <span class="fu">mean</span>(measurability <span class="sc">==</span> <span class="st">"Traced"</span>),</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">pagerank =</span> <span class="fu">sum</span>(pagerank),</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">pagerank_no_outcome =</span> <span class="fu">sum</span>(pagerank_no_outcome),</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">btw_rel =</span> <span class="fu">sum</span>(btw_rel)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_group, node_type) <span class="sc">|&gt;</span> </span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">overall_pagerank =</span> <span class="fu">sum</span>(pagerank <span class="sc">/</span> <span class="dv">8</span>),</span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">overall_pagerank_no_outcome =</span> <span class="fu">sum</span>(pagerank_no_outcome <span class="sc">/</span> <span class="dv">8</span>),</span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">overall_btw =</span> <span class="fu">sum</span>(btw_rel)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Betweenness</span></span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>p_top_node_btw <span class="ot">&lt;-</span> </span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>    all_node_groups_aggregated_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_group) <span class="sc">|&gt;</span></span>
-<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p_traced_group =</span> <span class="fu">mean</span>(p_traced)) <span class="sc">|&gt;</span></span>
-<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">node_group =</span> <span class="fu">fct_reorder</span>(node_group, overall_btw)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(node_group)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(overall_btw <span class="sc">&gt;</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> btw_rel)) <span class="sc">+</span></span>
-<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> p_traced_group), <span class="at">colour =</span> <span class="st">"grey"</span>, <span class="at">size =</span> <span class="fl">0.3</span>,  <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geom_point(aes(colour = btw_rel), alpha = 0.5) +</span></span>
-<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># viridis::scale_color_viridis("Centrality", option = "F", guide = "none") +</span></span>
-<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ggsci::scale_fill_npg() +</span></span>
-<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">1</span>]], <span class="at">high =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">6</span>]]) <span class="sc">+</span></span>
-<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># viridis::scale_fill_viridis("Centrality", option = "F") +</span></span>
-<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Node groups with highest central importance"</span>) <span class="sc">+</span></span>
-<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Node Centrality (relative Betweenness)"</span>) <span class="sc">+</span></span>
-<span id="cb39-35"><a href="#cb39-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(node_group <span class="sc">~</span> .) <span class="sc">+</span></span>
-<span id="cb39-36"><a href="#cb39-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"right"</span>) <span class="sc">+</span></span>
-<span id="cb39-37"><a href="#cb39-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb39-38"><a href="#cb39-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>,</span>
-<span id="cb39-39"><a href="#cb39-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-40"><a href="#cb39-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-41"><a href="#cb39-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-42"><a href="#cb39-42" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-43"><a href="#cb39-43" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb39-44"><a href="#cb39-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-45"><a href="#cb39-45" aria-hidden="true" tabindex="-1"></a><span class="co"># p_top_node_btw</span></span>
-<span id="cb39-46"><a href="#cb39-46" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb39-47"><a href="#cb39-47" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("node_betweenness.png", p_top_node_btw, width = 10, height = 4, dpi = 600)</span></span>
-<span id="cb39-48"><a href="#cb39-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-49"><a href="#cb39-49" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("node_pagerank.png", p_top_node_pagerank, width = 10, height = 4, dpi = 600)</span></span>
-<span id="cb39-50"><a href="#cb39-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-51"><a href="#cb39-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Pagerank no outcome</span></span>
-<span id="cb39-52"><a href="#cb39-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-53"><a href="#cb39-53" aria-hidden="true" tabindex="-1"></a>p_top_node_pagerank_no_outcome <span class="ot">&lt;-</span> </span>
-<span id="cb39-54"><a href="#cb39-54" aria-hidden="true" tabindex="-1"></a>    all_node_groups_aggregated_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb39-55"><a href="#cb39-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_group) <span class="sc">|&gt;</span></span>
-<span id="cb39-56"><a href="#cb39-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p_traced_group =</span> <span class="fu">mean</span>(p_traced)) <span class="sc">|&gt;</span></span>
-<span id="cb39-57"><a href="#cb39-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb39-58"><a href="#cb39-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">node_group =</span> <span class="fu">fct_reorder</span>(node_group, pagerank_no_outcome)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-59"><a href="#cb39-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(node_group)) <span class="sc">|&gt;</span> </span>
-<span id="cb39-60"><a href="#cb39-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(node_group <span class="sc">!=</span> <span class="st">"Grade.Outcome"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb39-61"><a href="#cb39-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="co"># need at least half the models with node group</span></span>
-<span id="cb39-62"><a href="#cb39-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> pagerank_no_outcome, <span class="at">y =</span> node_group)) <span class="sc">+</span></span>
-<span id="cb39-63"><a href="#cb39-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> p_traced_group), <span class="at">colour =</span> <span class="st">"lightgray"</span>, <span class="at">size =</span> <span class="fl">0.3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb39-64"><a href="#cb39-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> p_traced), <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
-<span id="cb39-65"><a href="#cb39-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">1</span>]], <span class="at">high =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">6</span>]],</span>
-<span id="cb39-66"><a href="#cb39-66" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
-<span id="cb39-67"><a href="#cb39-67" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Untraced"</span>,<span class="st">"Traced"</span>),</span>
-<span id="cb39-68"><a href="#cb39-68" aria-hidden="true" tabindex="-1"></a>                         <span class="at">name =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb39-69"><a href="#cb39-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">1</span>]], <span class="at">high =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">6</span>]]) <span class="sc">+</span></span>
-<span id="cb39-70"><a href="#cb39-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb39-71"><a href="#cb39-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Node group"</span>) <span class="sc">+</span></span>
-<span id="cb39-72"><a href="#cb39-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Node groups combined Centrality (Pagerank)"</span>) <span class="sc">+</span></span>
-<span id="cb39-73"><a href="#cb39-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb39-74"><a href="#cb39-74" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
-<span id="cb39-75"><a href="#cb39-75" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-76"><a href="#cb39-76" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-77"><a href="#cb39-77" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb39-78"><a href="#cb39-78" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb39-79"><a href="#cb39-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-80"><a href="#cb39-80" aria-hidden="true" tabindex="-1"></a>p_top_node_pagerank_no_outcome</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>all_node_groups_aggregated_metrics <span class="ot">&lt;-</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Model, node_group, node_type) <span class="sc">|&gt;</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">p_traced =</span> <span class="fu">mean</span>(measurability <span class="sc">==</span> <span class="st">"Traced"</span>),</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">pagerank =</span> <span class="fu">sum</span>(pagerank),</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">pagerank_no_outcome =</span> <span class="fu">sum</span>(pagerank_no_outcome),</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">btw_rel =</span> <span class="fu">sum</span>(btw_rel)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_group, node_type) <span class="sc">|&gt;</span> </span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">overall_pagerank =</span> <span class="fu">sum</span>(pagerank <span class="sc">/</span> <span class="dv">8</span>),</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">overall_pagerank_no_outcome =</span> <span class="fu">sum</span>(pagerank_no_outcome <span class="sc">/</span> <span class="dv">8</span>),</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">overall_btw =</span> <span class="fu">sum</span>(btw_rel)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Betweenness</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>p_top_node_btw <span class="ot">&lt;-</span> </span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>    all_node_groups_aggregated_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_group) <span class="sc">|&gt;</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p_traced_group =</span> <span class="fu">mean</span>(p_traced)) <span class="sc">|&gt;</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">node_group =</span> <span class="fu">fct_reorder</span>(node_group, overall_btw)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(node_group)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(overall_btw <span class="sc">&gt;</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> btw_rel)) <span class="sc">+</span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> p_traced_group), <span class="at">colour =</span> <span class="st">"grey"</span>, <span class="at">size =</span> <span class="fl">0.3</span>,  <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geom_point(aes(colour = btw_rel), alpha = 0.5) +</span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># viridis::scale_color_viridis("Centrality", option = "F", guide = "none") +</span></span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ggsci::scale_fill_npg() +</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">1</span>]], <span class="at">high =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">6</span>]]) <span class="sc">+</span></span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># viridis::scale_fill_viridis("Centrality", option = "F") +</span></span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Node groups with highest central importance"</span>) <span class="sc">+</span></span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Node Centrality (relative Betweenness)"</span>) <span class="sc">+</span></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(node_group <span class="sc">~</span> .) <span class="sc">+</span></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">"right"</span>) <span class="sc">+</span></span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>,</span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a><span class="co"># p_top_node_btw</span></span>
+<span id="cb38-46"><a href="#cb38-46" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb38-47"><a href="#cb38-47" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("node_betweenness.png", p_top_node_btw, width = 10, height = 4, dpi = 600)</span></span>
+<span id="cb38-48"><a href="#cb38-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-49"><a href="#cb38-49" aria-hidden="true" tabindex="-1"></a><span class="co"># ggsave("node_pagerank.png", p_top_node_pagerank, width = 10, height = 4, dpi = 600)</span></span>
+<span id="cb38-50"><a href="#cb38-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-51"><a href="#cb38-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Pagerank no outcome</span></span>
+<span id="cb38-52"><a href="#cb38-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-53"><a href="#cb38-53" aria-hidden="true" tabindex="-1"></a>p_top_node_pagerank_no_outcome <span class="ot">&lt;-</span> </span>
+<span id="cb38-54"><a href="#cb38-54" aria-hidden="true" tabindex="-1"></a>    all_node_groups_aggregated_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb38-55"><a href="#cb38-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_group) <span class="sc">|&gt;</span></span>
+<span id="cb38-56"><a href="#cb38-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p_traced_group =</span> <span class="fu">mean</span>(p_traced)) <span class="sc">|&gt;</span></span>
+<span id="cb38-57"><a href="#cb38-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb38-58"><a href="#cb38-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">node_group =</span> <span class="fu">fct_reorder</span>(node_group, pagerank_no_outcome)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-59"><a href="#cb38-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(node_group)) <span class="sc">|&gt;</span> </span>
+<span id="cb38-60"><a href="#cb38-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(node_group <span class="sc">!=</span> <span class="st">"Grade.Outcome"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-61"><a href="#cb38-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="co"># need at least half the models with node group</span></span>
+<span id="cb38-62"><a href="#cb38-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> pagerank_no_outcome, <span class="at">y =</span> node_group)) <span class="sc">+</span></span>
+<span id="cb38-63"><a href="#cb38-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> p_traced_group), <span class="at">colour =</span> <span class="st">"lightgray"</span>, <span class="at">size =</span> <span class="fl">0.3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb38-64"><a href="#cb38-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> p_traced), <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb38-65"><a href="#cb38-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">1</span>]], <span class="at">high =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">6</span>]],</span>
+<span id="cb38-66"><a href="#cb38-66" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb38-67"><a href="#cb38-67" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Untraced"</span>,<span class="st">"Traced"</span>),</span>
+<span id="cb38-68"><a href="#cb38-68" aria-hidden="true" tabindex="-1"></a>                         <span class="at">name =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb38-69"><a href="#cb38-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">1</span>]], <span class="at">high =</span> friendly_pals<span class="sc">$</span>vibrant_seven[[<span class="dv">6</span>]]) <span class="sc">+</span></span>
+<span id="cb38-70"><a href="#cb38-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb38-71"><a href="#cb38-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Node group"</span>) <span class="sc">+</span></span>
+<span id="cb38-72"><a href="#cb38-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Node groups combined Centrality (Pagerank)"</span>) <span class="sc">+</span></span>
+<span id="cb38-73"><a href="#cb38-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb38-74"><a href="#cb38-74" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb38-75"><a href="#cb38-75" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-76"><a href="#cb38-76" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.line.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-77"><a href="#cb38-77" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb38-78"><a href="#cb38-78" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb38-79"><a href="#cb38-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-80"><a href="#cb38-80" aria-hidden="true" tabindex="-1"></a>p_top_node_pagerank_no_outcome</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1915,45 +1957,45 @@ window.Quarto = {
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"node_pagerank_no_outcome.png"</span>, p_top_node_pagerank_no_outcome, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"node_pagerank_no_outcome.png"</span>, p_top_node_pagerank_no_outcome, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>node_groups_table <span class="ot">&lt;-</span> </span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    all_nodes_with_metrics <span class="sc">|&gt;</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">if_else</span>(</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>        node_group <span class="sc">==</span> <span class="st">"H.AI.good"</span> <span class="sc">&amp;</span> measurability <span class="sc">==</span> <span class="st">"Traced"</span>,</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_c</span>(nice_name, <span class="st">"*"</span>),</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>        nice_name</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">|&gt;</span> </span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_type, node_group) <span class="sc">|&gt;</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">measurability =</span> <span class="fu">case_when</span>(</span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">all</span>(measurability <span class="sc">==</span> <span class="st">"Traced"</span>) <span class="sc">~</span> <span class="st">"Traced"</span>,</span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">all</span>(measurability <span class="sc">==</span> <span class="st">"Untraced"</span>) <span class="sc">~</span> <span class="st">"Untraced"</span>,</span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">str_c</span>(<span class="st">"Some traced* ("</span>, <span class="fu">sum</span>(measurability <span class="sc">==</span> <span class="st">"Traced"</span>), <span class="st">" of "</span>, <span class="fu">n</span>(), <span class="st">")"</span>)</span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">|&gt;</span> </span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_type, node_group, measurability) <span class="sc">|&gt;</span></span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodes =</span> <span class="fu">str_c</span>(<span class="fu">unique</span>(name), <span class="at">collapse =</span> <span class="st">"; "</span>),</span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">n =</span> <span class="fu">sum</span>(node_w),</span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">pagerank =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pagerank_no_outcome) <span class="sc">/</span> <span class="dv">8</span>, <span class="dv">2</span>)</span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ,btw = round(sum(btw_rel), 3)</span></span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
-<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">pagerank =</span> <span class="fu">if_else</span>(node_group <span class="sc">==</span> <span class="st">"Grade.Outcome"</span>, <span class="cn">NA</span>, pagerank)) <span class="sc">|&gt;</span> </span>
-<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mutate(node_type = case_when(</span></span>
-<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "L" ~ "Learning Design",</span></span>
-<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "S" ~ "Student",</span></span>
-<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "T" ~ "Teacher",</span></span>
-<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "C" ~ "Course Data",</span></span>
-<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "G" ~ "Grade Data",</span></span>
-<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "H" ~ "Help"</span></span>
-<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># )) |&gt; </span></span>
-<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(n), <span class="fu">desc</span>(pagerank)) </span>
-<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>node_groups_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>node_groups_table <span class="ot">&lt;-</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    all_nodes_with_metrics <span class="sc">|&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(name_node_nice_name, <span class="at">by =</span> <span class="st">"name"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">if_else</span>(</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>        node_group <span class="sc">==</span> <span class="st">"H.AI.good"</span> <span class="sc">&amp;</span> measurability <span class="sc">==</span> <span class="st">"Traced"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_c</span>(nice_name, <span class="st">"*"</span>),</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>        nice_name</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">|&gt;</span> </span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_type, node_group) <span class="sc">|&gt;</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">measurability =</span> <span class="fu">case_when</span>(</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">all</span>(measurability <span class="sc">==</span> <span class="st">"Traced"</span>) <span class="sc">~</span> <span class="st">"Traced"</span>,</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">all</span>(measurability <span class="sc">==</span> <span class="st">"Untraced"</span>) <span class="sc">~</span> <span class="st">"Untraced"</span>,</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">str_c</span>(<span class="st">"Some traced* ("</span>, <span class="fu">sum</span>(measurability <span class="sc">==</span> <span class="st">"Traced"</span>), <span class="st">" of "</span>, <span class="fu">n</span>(), <span class="st">")"</span>)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">|&gt;</span> </span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(node_type, node_group, measurability) <span class="sc">|&gt;</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodes =</span> <span class="fu">str_c</span>(<span class="fu">unique</span>(name), <span class="at">collapse =</span> <span class="st">"; "</span>),</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">n =</span> <span class="fu">sum</span>(node_w),</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">pagerank =</span> <span class="fu">round</span>(<span class="fu">sum</span>(pagerank_no_outcome) <span class="sc">/</span> <span class="dv">8</span>, <span class="dv">2</span>)</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ,btw = round(sum(btw_rel), 3)</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">pagerank =</span> <span class="fu">if_else</span>(node_group <span class="sc">==</span> <span class="st">"Grade.Outcome"</span>, <span class="cn">NA</span>, pagerank)) <span class="sc">|&gt;</span> </span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mutate(node_type = case_when(</span></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "L" ~ "Learning Design",</span></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "S" ~ "Student",</span></span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "T" ~ "Teacher",</span></span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "C" ~ "Course Data",</span></span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "G" ~ "Grade Data",</span></span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     node_type == "H" ~ "Help"</span></span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># )) |&gt; </span></span>
+<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(n), <span class="fu">desc</span>(pagerank)) </span>
+<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a>node_groups_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 21 × 6
@@ -1976,28 +2018,28 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(name) <span class="sc">|&gt;</span> </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="st">"distinct nodes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="st">"distinct nodes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "74 distinct nodes"</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(node_group) <span class="sc">|&gt;</span> </span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="st">"node groups"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(node_group) <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="st">"node groups"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "21 node groups"</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(name, measurability) <span class="sc">|&gt;</span> <span class="fu">count</span>(measurability)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>all_nodes_with_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(name, measurability) <span class="sc">|&gt;</span> <span class="fu">count</span>(measurability)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
@@ -2010,35 +2052,35 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>node_groups_table <span class="sc">|&gt;</span> clipr<span class="sc">::</span><span class="fu">write_clip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>node_groups_table <span class="sc">|&gt;</span> clipr<span class="sc">::</span><span class="fu">write_clip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>p_node_measure_prop <span class="ot">&lt;-</span> </span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    dag_complexity_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">fct_reorder</span>(Model, p_traced)) <span class="sc">|&gt;</span> </span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">"p_"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">Measurability =</span> <span class="fu">case_when</span>(</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">str_detect</span>(name, <span class="st">"_tra"</span>) <span class="sc">~</span> <span class="st">"Traced"</span>,</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">str_detect</span>(name, <span class="st">"_unt"</span>) <span class="sc">~</span> <span class="st">"Untraced"</span></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">|&gt;</span> </span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">factor</span>(<span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Traced"</span>, <span class="st">"Untraced"</span>))</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> Model, <span class="at">fill =</span> Measurability)) <span class="sc">+</span></span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> friendly_pals<span class="sc">$</span>vibrant_seven,<span class="at">name =</span> <span class="st">"Measurability of node:"</span>) <span class="sc">+</span></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>(),</span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"Proportion of nodes"</span>) <span class="sc">+</span></span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>,</span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>p_node_measure_prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>p_node_measure_prop <span class="ot">&lt;-</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    dag_complexity_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Model =</span> <span class="fu">fct_reorder</span>(Model, p_traced)) <span class="sc">|&gt;</span> </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">"p_"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">Measurability =</span> <span class="fu">case_when</span>(</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">str_detect</span>(name, <span class="st">"_tra"</span>) <span class="sc">~</span> <span class="st">"Traced"</span>,</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">str_detect</span>(name, <span class="st">"_unt"</span>) <span class="sc">~</span> <span class="st">"Untraced"</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">|&gt;</span> </span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">factor</span>(<span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Traced"</span>, <span class="st">"Untraced"</span>))</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value, <span class="at">y =</span> Model, <span class="at">fill =</span> Measurability)) <span class="sc">+</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> friendly_pals<span class="sc">$</span>vibrant_seven,<span class="at">name =</span> <span class="st">"Measurability of node:"</span>) <span class="sc">+</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>(),</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"Proportion of nodes"</span>) <span class="sc">+</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>,</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>p_node_measure_prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -2049,7 +2091,7 @@ window.Quarto = {
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"node_measurability_prop.png"</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"node_measurability_prop.png"</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -2058,54 +2100,54 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>all_edge_group_with_metrics <span class="ot">&lt;-</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    edges_with_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">from =</span> <span class="fu">code_node_group</span>(from),</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">to =</span> <span class="fu">code_node_group</span>(to)) <span class="sc">|&gt;</span> </span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(from, to) <span class="sc">|&gt;</span> </span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">n =</span> <span class="fu">sum</span>(n),</span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">max_n =</span> <span class="fu">sum</span>(max_n),</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">edge_p_w =</span> <span class="fu">mean</span>(edge_p_w),</span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">p_aligned =</span> <span class="fu">mean</span>(switched <span class="sc">==</span> <span class="st">"aligned"</span>)</span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>edge_group_analysis_edgelist <span class="ot">&lt;-</span> all_edge_group_with_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">edge_w =</span> n <span class="sc">+</span> edge_p_w <span class="sc">*</span> n) <span class="sc">|&gt;</span> </span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(edge_w))</span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a><span class="co"># the node group one here isn't one row per node group, and doesn't have the node type!</span></span>
-<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>edge_group_analysis_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(</span>
-<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodes =</span> all_node_groups_aggregated_metrics <span class="sc">|&gt;</span> </span>
-<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rename</span>(<span class="at">name =</span> node_group) <span class="sc">|&gt;</span> </span>
-<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">group_by</span>(name, node_type) <span class="sc">|&gt;</span> </span>
-<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarise</span>(</span>
-<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">p_traced =</span> <span class="fu">mean</span>(p_traced),</span>
-<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">pgrnk =</span> <span class="fu">mean</span>(pagerank_no_outcome),</span>
-<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">node_w =</span> <span class="fu">sum</span>(n)</span>
-<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>        ) , </span>
-<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">edges =</span> edge_group_analysis_edgelist)</span>
-<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>edge_group_analysis_graph <span class="sc">%N&gt;%</span></span>
-<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(name) <span class="sc">|&gt;</span> </span>
-<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># activate(edges) |&gt;</span></span>
-<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># filter(edge_w &gt; 8) |&gt;</span></span>
-<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggraph</span>(</span>
-<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">layout =</span> <span class="st">"circle"</span></span>
-<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># layout = "sugiyama"</span></span>
-<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
-<span id="cb52-38"><a href="#cb52-38" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_edge_diagonal</span>(</span>
-<span id="cb52-39"><a href="#cb52-39" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), </span>
-<span id="cb52-40"><a href="#cb52-40" aria-hidden="true" tabindex="-1"></a>                          <span class="at">strength =</span> <span class="fl">0.5</span>,</span>
-<span id="cb52-41"><a href="#cb52-41" aria-hidden="true" tabindex="-1"></a>                          <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
-<span id="cb52-42"><a href="#cb52-42" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">type =</span> <span class="st">"closed"</span>),</span>
-<span id="cb52-43"><a href="#cb52-43" aria-hidden="true" tabindex="-1"></a>                          <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">2</span>, <span class="st">'mm'</span>),</span>
-<span id="cb52-44"><a href="#cb52-44" aria-hidden="true" tabindex="-1"></a>                          <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
-<span id="cb52-45"><a href="#cb52-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> pgrnk, <span class="at">color =</span> node_type)) <span class="sc">+</span></span>
-<span id="cb52-46"><a href="#cb52-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb52-47"><a href="#cb52-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_edge_alpha</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">9</span>)) <span class="sc">+</span></span>
-<span id="cb52-48"><a href="#cb52-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_graph</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>all_edge_group_with_metrics <span class="ot">&lt;-</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    edges_with_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">from =</span> <span class="fu">code_node_group</span>(from),</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">to =</span> <span class="fu">code_node_group</span>(to)) <span class="sc">|&gt;</span> </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(from, to) <span class="sc">|&gt;</span> </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">n =</span> <span class="fu">sum</span>(n),</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">max_n =</span> <span class="fu">sum</span>(max_n),</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">edge_p_w =</span> <span class="fu">mean</span>(edge_p_w),</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">p_aligned =</span> <span class="fu">mean</span>(switched <span class="sc">==</span> <span class="st">"aligned"</span>)</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>edge_group_analysis_edgelist <span class="ot">&lt;-</span> all_edge_group_with_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">edge_w =</span> n <span class="sc">+</span> edge_p_w <span class="sc">*</span> n) <span class="sc">|&gt;</span> </span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(edge_w))</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="co"># the node group one here isn't one row per node group, and doesn't have the node type!</span></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>edge_group_analysis_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodes =</span> all_node_groups_aggregated_metrics <span class="sc">|&gt;</span> </span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">rename</span>(<span class="at">name =</span> node_group) <span class="sc">|&gt;</span> </span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">group_by</span>(name, node_type) <span class="sc">|&gt;</span> </span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarise</span>(</span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">p_traced =</span> <span class="fu">mean</span>(p_traced),</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">pgrnk =</span> <span class="fu">mean</span>(pagerank_no_outcome),</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">node_w =</span> <span class="fu">sum</span>(n)</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>        ) , </span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">edges =</span> edge_group_analysis_edgelist)</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>edge_group_analysis_graph <span class="sc">%N&gt;%</span></span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># activate(edges) |&gt;</span></span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># filter(edge_w &gt; 8) |&gt;</span></span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggraph</span>(</span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">layout =</span> <span class="st">"circle"</span></span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># layout = "sugiyama"</span></span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_edge_diagonal</span>(</span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">alpha =</span> edge_w), </span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>                          <span class="at">strength =</span> <span class="fl">0.5</span>,</span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>                          <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">'mm'</span>),</span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">type =</span> <span class="st">"closed"</span>),</span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>                          <span class="at">start_cap =</span> <span class="fu">circle</span>(<span class="dv">2</span>, <span class="st">'mm'</span>),</span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>                          <span class="at">end_cap =</span> <span class="fu">circle</span>(<span class="dv">3</span>, <span class="st">'mm'</span>)) <span class="sc">+</span></span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> pgrnk, <span class="at">color =</span> node_type)) <span class="sc">+</span></span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_edge_alpha</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.1</span>,<span class="dv">9</span>)) <span class="sc">+</span></span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_graph</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>

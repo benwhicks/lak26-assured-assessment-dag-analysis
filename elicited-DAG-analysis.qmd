@@ -1397,28 +1397,80 @@ p8 <- g_plot_fine(tdag_s8, weight_nodes = FALSE)
     #   )
     # )
 
+hl_text_size <- 1.5
+hl_text_alpha <- 0.7
+
 p2peerHighlight <- p2 + 
     geom_node_point(size = 3, shape = 1, alpha = 0.6,
     data = p2$data |>  filter(name == "H.Peer")) +
     geom_node_point(size = 5, shape = 1, alpha = 0.3,
     data = p2$data |>  filter(name == "H.Peer")) +
     geom_node_point(size = 7, shape = 1, alpha = 0.1,
-    data = p2$data |>  filter(name == "H.Peer")) 
+    data = p2$data |>  filter(name == "H.Peer")) +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   size = hl_text_size , alpha = hl_text_alpha,
+    data = p2$data |>  filter(name == "H.Peer") |> 
+        inner_join(name_node_nice_name, by = "name"), repel = T) 
 p3peerHighlight <- p3 + 
     geom_node_point(size = 3, shape = 1, alpha = 0.6,
     data = p3$data |>  filter(name == "H.Peer")) +
     geom_node_point(size = 5, shape = 1, alpha = 0.3,
     data = p3$data |>  filter(name == "H.Peer")) +
     geom_node_point(size = 7, shape = 1, alpha = 0.1,
-    data = p3$data |>  filter(name == "H.Peer")) 
+    data = p3$data |>  filter(name == "H.Peer")) +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   size = hl_text_size , alpha = hl_text_alpha,
+    data = p3$data |>  filter(name == "H.Peer") |> 
+        inner_join(name_node_nice_name, by = "name"), repel = T) 
 p4peerHighlight <- p4 +
     geom_node_point(size = 3, shape = 1, alpha = 0.6,
     data = p4$data |>  filter(name == "H.Peer")) +
     geom_node_point(size = 5, shape = 1, alpha = 0.3,
     data = p4$data |>  filter(name == "H.Peer")) +
     geom_node_point(size = 7, shape = 1, alpha = 0.1,
-    data = p4$data |>  filter(name == "H.Peer")) 
+    data = p4$data |>  filter(name == "H.Peer")) +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   size = hl_text_size , alpha = hl_text_alpha,
+    data = p4$data |>  filter(name == "H.Peer") |> 
+        inner_join(name_node_nice_name, by = "name"), repel = T) 
+
+p7KnHighlight <- p7 +
+    geom_node_point(size = 3, shape = 5, alpha = 0.6,
+    data = p7$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_point(size = 5, shape = 5, alpha = 0.3,
+    data = p7$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_point(size = 7, shape = 5, alpha = 0.1,
+    data = p7$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   size = hl_text_size , alpha = hl_text_alpha,
+    data = p7$data |>  filter(str_detect(name, "Kn")) |> 
+        inner_join(name_node_nice_name, by = "name"), repel = T) 
+
+p5KnHighlight <- p5 +
+    geom_node_point(size = 3, shape = 5, alpha = 0.6,
+    data = p5$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_point(size = 5, shape = 5, alpha = 0.3,
+    data = p5$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_point(size = 7, shape = 5, alpha = 0.1,
+    data = p5$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   size = hl_text_size , alpha = hl_text_alpha,
+    data = p5$data |>  filter(str_detect(name, "Kn")) |> 
+        inner_join(name_node_nice_name, by = "name"), repel = T) 
+
+p6KnHighlight <- p6 +
+    geom_node_point(size = 3, shape = 5, alpha = 0.6,
+    data = p6$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_point(size = 5, shape = 5, alpha = 0.3,
+    data = p6$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_point(size = 7, shape = 5, alpha = 0.1,
+    data = p6$data |>  filter(str_detect(name, "Kn"))) +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   size = hl_text_size , alpha = hl_text_alpha,
+    data = p6$data |>  filter(str_detect(name, "Kn")) |> 
+        inner_join(name_node_nice_name, by = "name"), repel = T) 
 # 
+
 # ggsave("dag_s1_fine.svg", p1, width = 6, height = 6)
 # ggsave("dag_s2_fine.svg", p2, width = 6, height = 6)
 # ggsave("dag_s3_fine.svg", p3, width = 6, height = 6)
@@ -1449,21 +1501,22 @@ tag_plot <- function(p, tag, x = 0, y = 0.9, fontsize = 8) {
 pAll3by3 <- 
     (
         tag_plot(p2peerHighlight,"(a)")| 
-            tag_plot(p5, "(b)") | 
-            tag_plot(p7, "(c)")) / 
+            tag_plot(p8, "(b)") | 
+            tag_plot(p7KnHighlight, "(c)")) / 
     (
         tag_plot(p4peerHighlight, "(d)") | 
             tag_plot(p1, "(e)") | 
-            tag_plot(p8, "(f)")) / 
+            tag_plot(p5KnHighlight, "(f)")) / 
     (
         tag_plot(p3peerHighlight, "(g)") | 
             leg_tall_plot | 
-            tag_plot(p6, "(h)")) 
+            tag_plot(p6KnHighlight, "(h)")) 
      
-   pAll3by3
+
 pFineTogetherLabelled <- pAll3by3 / tag_plot(pMergedFineLabelled, "(i)") + plot_layout(heights = c(1,1,1,3))
 pFineTogether <- pAll3by3 / pMergedFine + plot_layout(heights = c(1,1,1,3))
 pFineTogetherLabelled
+
 ggsave("dags_fine_all_and_merged.png", pFineTogether, width = 9, height = 10, dpi = 900)
 ggsave("dags_fine_all_and_merged.svg", pFineTogether, width = 9, height = 10)
 ggsave("dags_fine_all_and_merged_labelled.png", pFineTogetherLabelled, width = 9, height = 10, dpi = 900)
