@@ -976,24 +976,89 @@ all_edges <- bind_rows(g_labelled_edgelist(tdag_s1),
     bind_rows(g_labelled_edgelist(tdag_s8)) 
 reverses <- tibble(Model = all_edges$Model, from = all_edges$to, to = all_edges$from)
 
-all_edges_sum <- 
-    all_edges |> 
-    count(from, to) |> 
-    arrange(desc(n))
+g_all_descendants_edge_list <- function(g, m) {
+    # Get descendant edges
+    expanded <- distances(g) < Inf
+    closure_edges <- which(expanded, arr.ind = TRUE)
+    
+    expanded_edges <- data.frame(
+        Model = m,
+        from = V(g)[closure_edges[,1]]$name,
+        to   = V(g)[closure_edges[,2]]$name
+    ) |> dplyr::filter(from != to)
+    return(expanded_edges)
+}
 
-edges_with_metrics <- 
+all_descendants <- 
+    bind_rows(
+        g_all_descendants_edge_list(tdag_s1, "s1"),
+        g_all_descendants_edge_list(tdag_s2, "s2"),
+    ) |> 
+    bind_rows(g_all_descendants_edge_list(tdag_s3, "s3")) |> 
+    bind_rows(g_all_descendants_edge_list(tdag_s4, "s4")) |> 
+    bind_rows(g_all_descendants_edge_list(tdag_s5, "s5")) |> 
+    bind_rows(g_all_descendants_edge_list(tdag_s6, "s6")) |> 
+    bind_rows(g_all_descendants_edge_list(tdag_s7, "s7")) |> 
+    bind_rows(g_all_descendants_edge_list(tdag_s8, "s8")) |> 
+    as_tibble()
+
+
+all_edges_summary <- 
+    all_possible_edges |> 
+    filter(from != to) |> 
+    left_join(all_edges |> mutate(in_graph = TRUE)) |> 
+    mutate(in_graph = replace_na(in_graph, FALSE)) |> 
+    left_join(all_descendants |> mutate(descendant = TRUE)) |> 
+    mutate(descendant = replace_na(descendant, FALSE))
+
+all_edges_sum <- 
+    all_edges_summary |>
+    group_by(from, to) |> 
+    summarise(n = sum(in_graph),
+              n_desc = sum(descendant)) |> 
+    arrange(desc(n)) |> 
+    ungroup()
+
+
+all_edges_with_metrics <- 
     all_edges_sum |> 
+    filter(n > 0) |> 
     inner_join(max_possible_edges) |> 
-    mutate(edge_p_w = n / max_n) |> 
+    mutate(
+        edge_p_w = n / max_n,
+        edge_dp_w = n_desc / max_n) |> 
     mutate(edge_w = n)
+
+# edge_not_chosen <- 
+#     all_possible_edges |> 
+#     inner_join(edges_with_metrics |> 
+#                    filter(edge_p_w < 1) , relationship = "many-to-many") |> 
+#     anti_join(all_edges) |> 
+#     select(Model, from, to) |> 
+#     distinct() |> 
+#     left_join(
+#         all_descendants |> 
+#             # anti_join(all_edges) |> 
+#             mutate(is_descendant = TRUE)) |> 
+#     mutate(is_descendant = replace_na(is_descendant, FALSE))
+
+# edges_with_metrics <- 
+#     edges_with_metrics |> 
+#     left_join(edge_not_chosen |>
+#                   filter(is_descendant) |> 
+#                   group_by(from, to) |> 
+#                   summarise(n_mediated = sum(is_descendant))) |> 
+#     mutate(n_mediated = replace_na(n_mediated, 0)) |> 
+#     distinct()
 
 switches <- inner_join(all_edges, reverses, by = c("from", "to"),
                        relationship = "many-to-many") |> 
     arrange(Model.x)
 
 edges_with_metrics <- 
-    edges_with_metrics |> 
-    left_join(switches |> select(from, to) |> mutate(switched = "contested")) |> 
+    all_edges_with_metrics |> 
+    left_join(switches |> 
+                  select(from, to) |> mutate(switched = "contested")) |> 
     mutate(switched = replace_na(switched, "aligned"))
 
 ```
@@ -1253,14 +1318,18 @@ tb_edge_coherence <-
     edges_with_metrics |> 
     summarise(
         n = sum(n),
+        n_desc = sum(n_desc),
         max_n = sum(max_n),
-        aligned = mean(switched == "aligned")
+        aligned = mean(switched == "aligned"),
+        contested = mean(switched != "aligned")
     ) |> 
-    mutate(edges_included = n / max_n)
+    mutate(edges_included = n / max_n,
+           desc_incllude = n_desc / max_n)
 tb_edge_coherence
 ```
 
 Generally when two nodes in the model were selected by different participants the same edge was drawn in `r round(100*tb_edge_coherence$edges_included , 2)`% of the time. A handful of potential edges (`r round(100*(1-tb_edge_coherence$aligned),2)`%) were included, but asigned a different direction of causal flow. 
+In `r round(100*tb_edge_coherence$desc_incllude , 2)`% of the cases where a path $A \rightarrow B$ was included in a model, then there existed a path from $A$ to $B$ in every other model that included those two nodes, just sometimes through a mediator(s) variable. 
 
 ### Merging graphs
 
@@ -1794,6 +1863,8 @@ ggsave("node_measurability_prop.png", height = 4, width = 8, dpi = 600)
 ```
 
 ## Edge / path importance
+
+
 
 ``` {r}
 all_edge_group_with_metrics <-

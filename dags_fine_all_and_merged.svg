@@ -157,7 +157,7 @@
 <circle cx='150.55' cy='33.06' r='3.56' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.60;' />
 <circle cx='150.55' cy='33.06' r='5.69' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.30;' />
 <circle cx='150.55' cy='33.06' r='7.82' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
-<text x='161.16' y='28.70' text-anchor='middle' style='font-size: 4.27px;fill: #009988; fill-opacity: 0.70; font-family: "Arial";' textLength='30.38px' lengthAdjust='spacingAndGlyphs'>Help from peers</text>
+<text x='139.92' y='40.47' text-anchor='middle' style='font-size: 4.27px;fill: #009988; fill-opacity: 0.70; font-family: "Arial";' textLength='30.38px' lengthAdjust='spacingAndGlyphs'>Help from peers</text>
 <text x='8.22' y='22.85' style='font-size: 8.00px; font-family: "Arial";' textLength='9.80px' lengthAdjust='spacingAndGlyphs'>(a)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw3MjAuMDA=)'>
@@ -348,10 +348,10 @@
 <polygon points='482.92,76.76 493.99,65.70 505.05,76.76 493.99,87.83 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
 <polygon points='493.08,15.58 504.14,4.51 515.21,15.58 504.14,26.64 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
 <polygon points='487.44,68.02 498.50,56.96 509.56,68.02 498.50,79.09 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
-<text x='470.70' y='75.50' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='68.38px' lengthAdjust='spacingAndGlyphs'>Student communications knowledge</text>
+<text x='470.70' y='75.49' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='68.38px' lengthAdjust='spacingAndGlyphs'>Student communications knowledge</text>
 <text x='506.43' y='85.72' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='62.45px' lengthAdjust='spacingAndGlyphs'>Student interpretation knowledge</text>
-<text x='532.15' y='12.15' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='46.06px' lengthAdjust='spacingAndGlyphs'>Student prior knowledge</text>
-<text x='509.20' y='63.61' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='54.39px' lengthAdjust='spacingAndGlyphs'>Student technical knowledge</text>
+<text x='493.46' y='23.03' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='46.06px' lengthAdjust='spacingAndGlyphs'>Student prior knowledge</text>
+<text x='509.19' y='63.61' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='54.39px' lengthAdjust='spacingAndGlyphs'>Student technical knowledge</text>
 <text x='432.91' y='22.85' style='font-size: 8.00px; font-family: "Arial";' textLength='9.34px' lengthAdjust='spacingAndGlyphs'>(c)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw3MjAuMDA=)'>
@@ -474,7 +474,7 @@
 <circle cx='150.55' cy='152.15' r='3.56' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.60;' />
 <circle cx='150.55' cy='152.15' r='5.69' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.30;' />
 <circle cx='150.55' cy='152.15' r='7.82' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
-<text x='139.96' y='159.56' text-anchor='middle' style='font-size: 4.27px;fill: #009988; fill-opacity: 0.70; font-family: "Arial";' textLength='30.38px' lengthAdjust='spacingAndGlyphs'>Help from peers</text>
+<text x='161.15' y='147.78' text-anchor='middle' style='font-size: 4.27px;fill: #009988; fill-opacity: 0.70; font-family: "Arial";' textLength='30.38px' lengthAdjust='spacingAndGlyphs'>Help from peers</text>
 <text x='8.22' y='141.93' style='font-size: 8.00px; font-family: "Arial";' textLength='9.80px' lengthAdjust='spacingAndGlyphs'>(d)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw3MjAuMDA=)'>
@@ -621,7 +621,7 @@
 <polygon points='553.28,187.11 558.31,182.08 563.34,187.11 558.31,192.14 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.60;' />
 <polygon points='550.27,187.11 558.31,179.06 566.36,187.11 558.31,195.16 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.30;' />
 <polygon points='547.25,187.11 558.31,176.05 569.38,187.11 558.31,198.17 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
-<text x='547.69' y='194.54' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='51.06px' lengthAdjust='spacingAndGlyphs'>Student subject knowledge</text>
+<text x='568.92' y='182.74' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='51.06px' lengthAdjust='spacingAndGlyphs'>Student subject knowledge</text>
 <text x='432.91' y='141.93' style='font-size: 8.00px; font-family: "Arial";' textLength='7.56px' lengthAdjust='spacingAndGlyphs'>(f)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw3MjAuMDA=)'>
@@ -739,7 +739,7 @@
 <circle cx='151.17' cy='271.23' r='3.56' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.60;' />
 <circle cx='151.17' cy='271.23' r='5.69' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.30;' />
 <circle cx='151.17' cy='271.23' r='7.82' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
-<text x='161.81' y='266.86' text-anchor='middle' style='font-size: 4.27px;fill: #009988; fill-opacity: 0.70; font-family: "Arial";' textLength='30.38px' lengthAdjust='spacingAndGlyphs'>Help from peers</text>
+<text x='140.50' y='278.65' text-anchor='middle' style='font-size: 4.27px;fill: #009988; fill-opacity: 0.70; font-family: "Arial";' textLength='30.38px' lengthAdjust='spacingAndGlyphs'>Help from peers</text>
 <text x='8.22' y='261.02' style='font-size: 8.00px; font-family: "Arial";' textLength='9.80px' lengthAdjust='spacingAndGlyphs'>(g)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw3MjAuMDA=)'>
@@ -829,7 +829,7 @@
 <polygon points='552.92,306.20 557.95,301.17 562.97,306.20 557.95,311.23 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.60;' />
 <polygon points='549.90,306.20 557.95,298.15 565.99,306.20 557.95,314.24 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.30;' />
 <polygon points='546.88,306.20 557.95,295.13 569.01,306.20 557.95,317.26 ' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.10;' />
-<text x='568.61' y='301.82' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='51.06px' lengthAdjust='spacingAndGlyphs'>Student subject knowledge</text>
+<text x='568.62' y='301.82' text-anchor='middle' style='font-size: 4.27px;fill: #EE3377; fill-opacity: 0.70; font-family: "Arial";' textLength='51.06px' lengthAdjust='spacingAndGlyphs'>Student subject knowledge</text>
 <text x='432.00' y='261.02' style='font-size: 8.00px; font-family: "Arial";' textLength='9.80px' lengthAdjust='spacingAndGlyphs'>(h)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw3MjAuMDA=)'>
