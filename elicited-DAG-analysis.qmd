@@ -590,7 +590,7 @@ name_node_nice_name <- tribble(
     "LD.Task.Other", "Other task design",
     "LD.Task.Prac", "Practical task design",
     "LD.Task.Write", "Writing task design",
-    "S.Act", "Student activity",
+    "S.Act", "Student decisions / actions",
     "S.Act.AIstrat", "Student AI strategy",
     "S.Act.Fb", "Student acts on feedback",
     "S.Act.Fb.Post", "Student acts on feedback between subjects",
@@ -627,6 +627,31 @@ name_node_nice_name <- tribble(
     "T.Kn.AI", "Teacher AI literacy",
     "T.Kn.Ass", "Teacher assessment literacy",
     "T.Kn.Sub", "Teacher subject knowledge"
+)
+
+node_group_nice_name <- tribble(
+    ~node_group, ~nice_name,
+    "Assessments", "Preliminary assessments", 
+    "CD.Att", "Student attendance",
+    "CD.LMS", "LMS activity",
+    "CD.Str", "Course Data",
+    "Grade.Outcome", "Assessment grade",
+    "H.AI.evil", "Misuse of AI",
+    "H.AI.good", "Help from AI",
+    "H.Cheat", "Cheating - non-AI",
+    "H.Peer", "Help from peers",
+    "H.Tut", "Help from teacher / tutor",
+    "LD", "Learning design",
+    "S.Act", "Student decisions / actions",
+    "S.Att", "Student attributes",
+    "S.Cp", "Student metacognitive skill",
+    "S.EM", "Student emotion / motivation",
+    "S.Kn", "Student knowledge",
+    "S.Kn.Prior", "Student prior knowledge",
+    "T.Act", "Teacher use of AI",
+    "T.Cp", "Teacher capabilities", 
+    "T.EM", "Teacher emotion / motivation",
+    "T.Kn", "Teacher knowledge"
 )
 ```
 
@@ -1272,7 +1297,7 @@ gcm_metrics <-
 
 ## Session and other
 
-### Time spent with model and modelling utility
+#### Figure: Time spent with model and modelling utility
 
 ``` {r}
 p_time_and_representaion <- 
@@ -1296,7 +1321,7 @@ p_time_and_representaion <-
     theme(legend.position = "right")
 
 p_time_and_representaion
-ggsave("time-modelling-and-representation.png", width = 6, height = 3, dpi = 600)
+ggsave("figures/FIG--time-modelling-and-representation.png", width = 6, height = 3, dpi = 600)
 ```
 
 As a table:
@@ -1446,8 +1471,8 @@ leg_tall <- cowplot::get_legend(pMergedFineLegendTall)
 leg_tall_plot <- cowplot::ggdraw(leg_tall)
 
 
-ggsave("dag_merged_fine.svg", pMergedFine, width = 6, height = 4)
-ggsave("dag_merged_fine_labelled.svg", pMergedFineLabelled, width = 6, height = 4)
+# ggsave("dag_merged_fine.svg", pMergedFine, width = 6, height = 4)
+# ggsave("dag_merged_fine_labelled.svg", pMergedFineLabelled, width = 6, height = 4)
 ```
 
 
@@ -1557,10 +1582,10 @@ p6KnHighlight <- p6 +
 ``` {r}
 pAllFine <- (p1 | p2 | p3 | p4) / (p5 | p6 | p7 | p8)
 pAllFine
-ggsave("dags_All_fine.svg", pAllFine, width = 18, height = 9)
+# ggsave("dags_All_fine.svg", pAllFine, width = 18, height = 9)
 ```
 
-#### Building main DAG figure
+#### Figure: Model graphs, all and merged
 
 ``` {r}
 library(grid)
@@ -1590,10 +1615,10 @@ pFineTogetherLabelled <- pAll3by3 / tag_plot(pMergedFineLabelled, "(i)") + plot_
 pFineTogether <- pAll3by3 / pMergedFine + plot_layout(heights = c(1,1,1,3))
 pFineTogetherLabelled
 
-ggsave("dags_fine_all_and_merged.png", pFineTogether, width = 9, height = 10, dpi = 900)
-ggsave("dags_fine_all_and_merged.svg", pFineTogether, width = 9, height = 10)
-ggsave("dags_fine_all_and_merged_labelled.png", pFineTogetherLabelled, width = 9, height = 10, dpi = 900)
-ggsave("dags_fine_all_and_merged_labelled.svg", pFineTogetherLabelled, width = 9, height = 10)
+# ggsave("dags_fine_all_and_merged.png", pFineTogether, width = 9, height = 10, dpi = 900)
+# ggsave("dags_fine_all_and_merged.svg", pFineTogether, width = 9, height = 10)
+ggsave("figures/FIG--dags_fine_all_and_merged_labelled.png", pFineTogetherLabelled, width = 9, height = 10, dpi = 900)
+# ggsave("dags_fine_all_and_merged_labelled.svg", pFineTogetherLabelled, width = 9, height = 10)
 ```
 
 
@@ -1661,7 +1686,7 @@ g_plot_course <- function(g, lyt = merged_course_layout) {
 
 pCourseMerged <- merged_course_layout |> 
     course_plot_from_layout()
-ggsave("dag_merged_course.svg", pCourseMerged, , width = 6, height = 6)
+# ggsave("dag_merged_course.svg", pCourseMerged, , width = 6, height = 6)
 ```
 
 
@@ -1682,7 +1707,7 @@ p7course <- g_coursen_dag_by_ng(tdag_s7) |> g_plot_course()
 p8course <- g_coursen_dag_by_ng(tdag_s8) |> g_plot_course()
 
 pAllcourse <- (p1course | p2course | p3course | p4course) / (p5course | p6course | p7course | p8course)
-ggsave("dags_all_course.svg", pAllcourse, width = 18, height = 9)
+# ggsave("dags_all_course.svg", pAllcourse, width = 18, height = 9)
 
 pAllcourse
 ```
@@ -1710,7 +1735,9 @@ all_node_groups_aggregated_metrics <-
 
 # Betweenness
 p_top_node_btw <- 
-    all_node_groups_aggregated_metrics |> 
+    all_node_groups_aggregated_metrics |>
+    # inner_join(node_group_nice_name) |> 
+    # rename(node_group = nice_name) |> 
     group_by(node_group) |>
     mutate(p_traced_group = mean(p_traced)) |>
     ungroup() |> 
@@ -1741,17 +1768,23 @@ p_top_node_btw <-
 # ggsave("node_betweenness.png", p_top_node_btw, width = 10, height = 4, dpi = 600)
 
 # ggsave("node_pagerank.png", p_top_node_pagerank, width = 10, height = 4, dpi = 600)
+```
 
+#### Figure: Node importance and trace availability
+
+``` {r}
 # Pagerank no outcome
 
 p_top_node_pagerank_no_outcome <- 
     all_node_groups_aggregated_metrics |> 
+    filter(node_group != "Grade.Outcome") |>
+    inner_join(node_group_nice_name, by = "node_group") |>
+    mutate(node_group = nice_name) |>
     group_by(node_group) |>
     mutate(p_traced_group = mean(p_traced)) |>
     ungroup() |> 
     mutate(node_group = fct_reorder(node_group, pagerank_no_outcome)) |> 
     arrange(desc(node_group)) |> 
-    filter(node_group != "Grade.Outcome") |>
     filter(n > 3) |> # need at least half the models with node group
     ggplot(aes(x = pagerank_no_outcome, y = node_group)) +
     geom_boxplot(aes(fill = p_traced_group), colour = "lightgray", size = 0.3, alpha = 0.7) +
@@ -1773,7 +1806,7 @@ p_top_node_pagerank_no_outcome <-
 
 p_top_node_pagerank_no_outcome
 
-ggsave("node_pagerank_no_outcome.png", p_top_node_pagerank_no_outcome, width = 10, height = 4, dpi = 600)
+ggsave("figures/FIG--node_pagerank_no_outcome.png", p_top_node_pagerank_no_outcome, width = 10, height = 4, dpi = 600)
 ```
 
 
@@ -1858,7 +1891,7 @@ p_node_measure_prop <-
         axis.title.y = element_blank())
 
 p_node_measure_prop
-ggsave("node_measurability_prop.png", height = 4, width = 8, dpi = 600)
+# ggsave("node_measurability_prop.png", height = 4, width = 8, dpi = 600)
 
 ```
 
