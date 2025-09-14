@@ -1527,7 +1527,7 @@ window.Quarto = {
 <span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>        <span class="fu">plot_fine_graph_from_layout</span>(<span class="at">weight_nodes =</span> weight_nodes)</span>
 <span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>pMergedFineLegend <span class="ot">&lt;-</span> merged_all_graph <span class="sc">|&gt;</span> </span>
+<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>pMergedFineLegend <span class="ot">&lt;-</span> merged_all_graph_layout_adjusted <span class="sc">|&gt;</span> </span>
 <span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">g_plot_fine</span>() <span class="sc">+</span> </span>
 <span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
 <span id="cb27-81"><a href="#cb27-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">size =</span> <span class="st">"none"</span>, <span class="at">edge_width =</span> <span class="st">"none"</span>, <span class="at">alpha =</span> <span class="st">"none"</span>, <span class="at">edge_alpha =</span> <span class="st">"none"</span>,</span>
@@ -1544,7 +1544,7 @@ window.Quarto = {
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pMergedFineLegendTall <span class="ot">&lt;-</span> merged_all_graph <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pMergedFineLegendTall <span class="ot">&lt;-</span> merged_all_graph_layout_adjusted <span class="sc">|&gt;</span> </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">g_plot_fine</span>() <span class="sc">+</span> </span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"right"</span>) <span class="sc">+</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">size =</span> <span class="st">"none"</span>, <span class="at">alpha =</span> <span class="st">"none"</span>, <span class="at">edge_alpha =</span> <span class="st">"none"</span>, <span class="at">edge_width =</span> <span class="st">"none"</span>,</span>
@@ -1556,7 +1556,7 @@ window.Quarto = {
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>pMergedFineLabelled <span class="ot">&lt;-</span> pMergedFine <span class="sc">+</span> </span>
 <span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_text</span>(</span>
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">label =</span> nice_name, <span class="at">size =</span> node_w, <span class="at">colour =</span> node_type), <span class="at">alpha =</span> <span class="fl">0.6</span>, </span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> merged_all_graph_layout <span class="sc">|&gt;</span>  <span class="fu">filter</span>(node_w <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>, <span class="at">max.overlaps =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> merged_all_graph_layout_adjusted <span class="sc">|&gt;</span>  <span class="fu">filter</span>(node_w <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>, <span class="at">max.overlaps =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    ggnewscale<span class="sc">::</span><span class="fu">new_scale</span>(<span class="st">"size"</span>) <span class="sc">+</span></span>
 <span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_size</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">6</span>), <span class="at">name =</span> <span class="st">"text-size"</span>)</span>
 <span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>pMergedFineLabelled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
