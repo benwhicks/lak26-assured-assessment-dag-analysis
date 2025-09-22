@@ -569,7 +569,7 @@ name_node_nice_name <- tribble(
     "Grade.Exam", "Mark - Exam",
     "Grade.Interp", "Mark - Interpretation",
     "Grade.Proc", "Mark - Learning process",
-    "Grade.Quiz", "Mark - Quizz",
+    "Grade.Quiz", "Mark - Quiz",
     "Grade.Ref", "Mark - Learning reflection",
     "Grade.Tech", "Mark - Technical",
     "H", "Help (general)",
@@ -1019,6 +1019,8 @@ g_all_descendants_edge_list <- function(g, m) {
     return(expanded_edges)
 }
 
+distances(tdag_s1) < Inf
+
 all_descendants <- 
     bind_rows(
         g_all_descendants_edge_list(tdag_s1, "s1"),
@@ -1347,6 +1349,12 @@ all_node_groups_distance_to_traced <-
 
 
 ```
+
+
+### Triads
+
+What are the common triads? Do these agree?
+
 
 ## Joining metrics and session data
 
@@ -1683,6 +1691,44 @@ ggsave("figures/FIG--dags_fine_all_and_merged_labelled.png", pFineTogetherLabell
 # ggsave("dags_fine_all_and_merged_labelled.svg", pFineTogetherLabelled, width = 9, height = 10)
 ```
 
+#### Common patterns - fine
+
+Most common three-node patterns. 
+
+``` {r}
+merged_all_graph |> 
+    activate("nodes") |> 
+    filter(node_w > 3) |> 
+    activate("edges") |>
+    filter(edge_w > 1) |>
+    g_plot_fine() +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   alpha = hl_text_alpha, repel = TRUE)
+
+```
+
+### Coursen graphs
+
+Here we merge nodes into node groups before generating plot. This has the potential to likely introduce loops depending on how the constructs were built. 
+
+``` {r}
+merged_course_models <- 
+    tbl_graph(
+        nodes = all_nodes |> 
+            mutate(name = code_node_group(name)) |> 
+            distinct(Model, name) |> 
+            count(name) |> 
+            rename(node_w = n) |> 
+            inner_join(node_group_nice_name |> rename(name = node_group)),
+        edges = all_edges |> 
+            mutate(across(from:to, code_node_group)) |> 
+            distinct() |> 
+            count(from, to) |> 
+            rename(edge_w = n)
+    )
+    
+```
+
 
 ``` {r plotting-course-graph}
 merged_course_layout <- 
@@ -1773,6 +1819,209 @@ pAllcourse <- (p1course | p2course | p3course | p4course) / (p5course | p6course
 
 pAllcourse
 ```
+
+``` {r}
+# all node group edges
+all_edges |> 
+    mutate(
+        from_g = code_node_group(from), 
+        to_g = code_node_group(to)) |> 
+    filter(to_g == "LD") |> 
+    filter(from_g == "CD.LMS")
+```
+
+#### Figure: Consensus DAG
+
+Most common node group patterns - nodes in at least half the models, then looking at the resulting graph of node-groups.
+
+``` {r}
+node_list_majority_of_models <- 
+    all_nodes |> 
+    count(name) |> 
+    filter(n >= 4) |> 
+    pull(name)
+
+course_filtered_graph_temp <- 
+    merged_all_graph |> 
+    activate("nodes") |> 
+    filter(name %in% node_list_majority_of_models)
+
+course_filtered_graph <- tbl_graph(
+    nodes = course_filtered_graph_temp %N>%
+        as_tibble() |> 
+        mutate(name = code_node_group(name),
+               node_type = code_node_type(name)) ,
+    edges = course_filtered_graph_temp %E>%
+        as_tibble() %>%
+        mutate(
+            from = course_filtered_graph_temp %N>% pull(name) %>% .[from],
+            to   = course_filtered_graph_temp %N>% pull(name) %>% .[to]
+        ) %>%
+        select(from, to, edge_w) |> 
+        mutate(across(from:to, code_node_group))) |> 
+    activate(edges) |> 
+    mutate(
+        switched = map_lgl(row_number(), function(i) {
+            from_i <- .E()$from[i]
+            to_i   <- .E()$to[i]
+            any(from == to_i & to == from_i)
+        })
+    ) 
+
+```
+
+``` {r}
+# Old - not used
+lyt_top_node_groups <- create_layout(course_filtered_graph, layout = "sugiyama") |> 
+    mutate(
+        x = case_when(
+            nice_name == "Student subject knowledge" ~ 0.5,
+            nice_name == "Assessment grade" ~ 0.5,
+            nice_name == "Help from teacher / tutor" ~ 1,
+            nice_name == "Task design" ~ 0.5,
+            TRUE ~ x
+        ),
+        y = case_when(
+            nice_name == "Student subject knowledge" ~ 2.5,
+            # nice_name == "Assessment grade" ~ 0.5,
+            nice_name == "LMS activity" ~ 1,
+            nice_name == "Task design" ~ 4,
+            TRUE ~ y
+        )
+    )
+
+p_top_node_groups <- ggraph(lyt_top_node_groups) +
+    geom_edge_fan(aes(edge_linetype = factor(switched), alpha = edge_w, ), # alpha = edge_w, 
+                  strength = 0.8,
+                  arrow = arrow(length = unit(2, 'mm'), type = "closed"),
+                  start_cap = circle(3, 'mm'),
+                  end_cap = circle(3, 'mm')) +
+    geom_node_point(aes(colour = node_type, size = node_w)) +
+        ggsci::scale_color_npg(drop = FALSE) +
+        # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
+        theme_graph() +
+        scale_edge_alpha_continuous(range = c(0.15,0.8)) +
+        scale_alpha_continuous(range = c(0.2,0.9)) +
+        theme(legend.position = "none") +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   alpha = 0.9, nudge_y = -.3, repel = T)
+
+# p_top_node_groups
+# ggsave("figures/FIG--consensus-DAG.png", p_top_node_groups, dpi = 600, height = 4, width = 6)
+```
+
+Weighting by num of models instead.
+This one uses only nodes that are in the majority of models, then coursens the graph, then aggregates edges based on the number of models that they appear in. 
+The edges must also appear in at least 2 models
+
+``` {r}
+node_list_majority_of_models <- 
+    all_nodes |> 
+    count(name) |> 
+    filter(n >= 4) |> 
+    pull(name)
+
+course_filtered_graph_ng_filled <- 
+    tbl_graph( # only nodes that are in most models (4 or more)
+        nodes = all_nodes |> 
+            filter(name %in% node_list_majority_of_models) |> 
+            mutate( # but then coursen into node groups
+                node_group = code_node_group(name),
+                   node_type = code_node_type(name)) |> 
+            count(node_group, node_type) |> 
+            rename(node_w = n),
+        edges =     all_edges |> # Only edges between node groups...
+            mutate(across(from:to, code_node_group)) |>
+            distinct(Model, from, to) |> 
+            count(from, to) |>
+            # filter(n > 1) |> # ...that occur in at least two models
+            filter(from %in% code_node_group(node_list_majority_of_models)) |>
+            filter(to %in% code_node_group(node_list_majority_of_models)) |>
+            rename(edge_w = n)) |> 
+    activate("edges") |> 
+    mutate(
+        switched = map_lgl(row_number(), function(i) {
+            from_i <- .E()$from[i]
+            to_i   <- .E()$to[i]
+            any(from == to_i & to == from_i)
+        })
+    ) |> 
+    activate("nodes") |> 
+    inner_join(node_group_nice_name)
+```
+
+Filtered - edges must be in at least 2 models
+
+``` {r}
+lyt_course_filtered_ng_filtered <- create_layout(
+    course_filtered_graph_ng_filled |> 
+        activate("edges") |> 
+        filter(edge_w > 1) |> 
+        mutate(
+            switched = map_lgl(row_number(), function(i) {
+                from_i <- .E()$from[i]
+                to_i   <- .E()$to[i]
+                any(from == to_i & to == from_i)
+            })
+        ) , 
+    layout = "sugiyama")
+
+p_top_node_groups_filtered <- ggraph(lyt_course_filtered_ng_filtered) +
+    geom_edge_fan(aes(edge_linetype = factor(switched), alpha = edge_w, ), # alpha = edge_w, 
+                  strength = 0.8,
+                  arrow = arrow(length = unit(2, 'mm'), type = "closed"),
+                  start_cap = circle(3, 'mm'),
+                  end_cap = circle(3, 'mm')) +
+    geom_node_point(aes(colour = node_type, size = node_w)) +
+        ggsci::scale_color_npg(drop = FALSE) +
+        # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
+        theme_graph() +
+        scale_edge_alpha_continuous(range = c(0.15,0.8)) +
+        scale_alpha_continuous(range = c(0.2,0.9)) +
+        theme(legend.position = "none") +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   alpha = 0.9, nudge_y = -.23, repel = T)
+
+p_top_node_groups_filtered
+
+ggsave("figures/FIG--consensus-sub-model-filtered.png", p_top_node_groups_filtered, dpi = 600, height = 4, width = 6)
+```
+
+All edges between node groups from the majority nodes
+
+``` {r}
+lyt_course_filtered_ng_full <- create_layout(
+    course_filtered_graph_ng_filled, 
+    layout = "sugiyama") |> 
+    select(-x, -y) |> 
+    inner_join(lyt_course_filtered_ng_filtered |> select(x, y, node_group))
+
+p_top_node_groups_full <- ggraph(lyt_course_filtered_ng_full) +
+    geom_edge_fan(aes(edge_linetype = factor(switched), alpha = edge_w, ), # alpha = edge_w, 
+                  strength = 0.8,
+                  arrow = arrow(length = unit(2, 'mm'), type = "closed"),
+                  start_cap = circle(3, 'mm'),
+                  end_cap = circle(3, 'mm')) +
+    geom_node_point(aes(colour = node_type, size = node_w)) +
+        ggsci::scale_color_npg(drop = FALSE) +
+        # geom_node_text(aes(label = name, size = node_w, alpha = node_w), nudge_y = -.5) +
+        theme_graph() +
+        scale_edge_alpha_continuous(range = c(0.15,0.8)) +
+        scale_alpha_continuous(range = c(0.2,0.9)) +
+        theme(legend.position = "none") +
+    geom_node_text(aes(label = nice_name, colour = node_type), 
+                   alpha = 0.9, nudge_y = -.23, repel = T)
+
+p_top_node_groups_full
+
+ggsave("figures/FIG--consensus-sub-model-full.png", p_top_node_groups_full, dpi = 600, height = 4, width = 6)
+```
+
+
+
+
+
+
 
 
 
@@ -1978,7 +2227,8 @@ node_groups_table <-
     #     node_type == "H" ~ "Help"
     # )) |> 
     arrange(desc(n), desc(pagerank)) |> 
-    select(node_group, everything())
+    select(node_group, node_type, nodes, n, measurability, pagerank) |> 
+    ungroup()
 
 node_groups_table
 ```
@@ -2000,8 +2250,38 @@ all_nodes_with_metrics |>
 
 ``` {r}
 #| eval: false
-node_groups_table |> clipr::write_clip()
+tb1 <- node_groups_table |> filter(n >= 7) |> arrange(desc(n))
+tb2 <- node_groups_table |> filter(n < 7) |> arrange(desc(n))
+tb1 |> clipr::write_clip()
+tb2 |> clipr::write_clip()
+
 ```
+
+What about grouping by the node category first, so it's hierarchical?
+
+``` {r}
+node_types_table <- 
+    node_groups_table |> 
+    group_by(node_type) |> 
+    mutate(nt = sum(n)) |> 
+    ungroup() |> 
+    arrange(desc(nt), desc(n)) |> 
+    select(node_type, nt, node_group, nodes, n, measurability, pagerank) |> 
+    mutate(node_type = str_c(node_type, " (", nt, ")")) |> 
+    select(-nt)
+
+node_types_table
+```
+
+``` {r}
+#| eval: false
+tbt1 <- node_types_table |> filter(str_detect(node_type, "Student|Help"))
+tbt2 <- node_types_table |> filter(!str_detect(node_type, "Student|Help"))
+tbt1 |> clipr::write_clip()
+tbt2 |> clipr::write_clip()
+
+```
+
 
 
 ``` {r}
