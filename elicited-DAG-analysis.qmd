@@ -2017,8 +2017,21 @@ p_top_node_groups_full
 ggsave("figures/FIG--consensus-sub-model-full.png", p_top_node_groups_full, dpi = 600, height = 4, width = 6)
 ```
 
+Node groups close to the constructs:
+- Belonging
+- Mindset
+- Collaboration
 
+``` {r}
+# all nodes
+all_nodes_with_metrics |> 
+    inner_join(name_node_nice_name) |> 
+    inner_join(node_group_nice_name |> rename(g_nice_name = nice_name)) |> 
+    select(name, nice_name, g_nice_name, node_group, Model, pagerank_no_outcome, pagerank, btw_rel_rank) |> 
+    arrange(name, Model) |> 
+    knitr::kable()
 
+```
 
 
 
