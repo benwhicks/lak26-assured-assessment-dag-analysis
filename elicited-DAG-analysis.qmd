@@ -1391,7 +1391,9 @@ p_time_and_representaion <-
     theme(legend.position = "right")
 
 p_time_and_representaion
-ggsave("figures/FIG--time-modelling-and-representation.png", width = 6, height = 3, dpi = 600)
+ggsave("figures/FIG--time-modelling-and-representation.png", 
+       width = 5, height = 4, 
+       dpi = 900)
 ```
 
 As a table:
@@ -1984,7 +1986,10 @@ p_top_node_groups_filtered <- ggraph(lyt_course_filtered_ng_filtered) +
 
 p_top_node_groups_filtered
 
-ggsave("figures/FIG--consensus-sub-model-filtered.png", p_top_node_groups_filtered, dpi = 600, height = 4, width = 6)
+ggsave("figures/FIG--consensus-sub-model-filtered.png", 
+       p_top_node_groups_filtered, 
+       dpi = 900, 
+       height = 4, width = 6)
 ```
 
 All edges between node groups from the majority nodes
@@ -2014,7 +2019,10 @@ p_top_node_groups_full <- ggraph(lyt_course_filtered_ng_full) +
 
 p_top_node_groups_full
 
-ggsave("figures/FIG--consensus-sub-model-full.png", p_top_node_groups_full, dpi = 600, height = 4, width = 6)
+ggsave("figures/FIG--consensus-sub-model-full.png", 
+       p_top_node_groups_full, 
+       dpi = 900, 
+       height = 4, width = 6)
 ```
 
 Node groups close to the constructs:
@@ -2096,42 +2104,6 @@ p_top_node_btw <-
 
 #### Figure: Node importance and trace availability
 
-``` {r}
-# Pagerank no outcome
-
-p_top_node_pagerank_no_outcome <- 
-    all_node_groups_aggregated_metrics |> 
-    filter(node_group != "Grade.Outcome") |>
-    inner_join(node_group_nice_name, by = "node_group") |>
-    mutate(node_group = nice_name) |>
-    group_by(node_group) |>
-    mutate(p_traced_group = mean(p_traced)) |>
-    ungroup() |> 
-    mutate(node_group = fct_reorder(node_group, pagerank_no_outcome)) |> 
-    arrange(desc(node_group)) |> 
-    filter(n > 3) |> # need at least half the models with node group
-    ggplot(aes(x = pagerank_no_outcome, y = node_group)) +
-    geom_boxplot(aes(fill = p_traced_group), colour = "lightgray", size = 0.3, alpha = 0.7) +
-    geom_point(aes(colour = p_traced), alpha = 0.9) +
-    scale_color_gradient(low = friendly_pals$vibrant_seven[[1]], high = friendly_pals$vibrant_seven[[6]],
-                         breaks = c(0,1),
-                         labels = c("Untraced","Traced"),
-                         name = "") +
-    scale_fill_gradient(low = friendly_pals$vibrant_seven[[1]], high = friendly_pals$vibrant_seven[[6]]) +
-    theme_minimal() +
-    ylab("Node group") +
-    xlab("Node groups combined Centrality (Pagerank)") +
-    guides(fill = "none") +
-    theme(legend.position = "right",
-          axis.ticks.y = element_blank(),
-          axis.line.y = element_blank(),
-          panel.grid.major.y = element_blank(),
-          panel.grid.minor.y = element_blank())
-
-p_top_node_pagerank_no_outcome
-
-ggsave("figures/FIG--node_pagerank_no_outcome.png", p_top_node_pagerank_no_outcome, width = 10, height = 4, dpi = 600)
-```
 
 ``` {r}
 # Pagerank no outcome - dist to traced version
@@ -2188,9 +2160,9 @@ p_top_node_pagerank_no_outcome_trace_dist <-
 p_top_node_pagerank_no_outcome_trace_dist
 
 ggsave("figures/FIG--node_pagerank_no_outcome_trace_distance.png", p_top_node_pagerank_no_outcome_trace_dist, 
-       width = 10, 
+       width = 5, 
        height = 4, 
-       dpi = 600)
+       dpi = 900)
 
 d_ng_trace_importance |> 
     group_by(node_group) |> 
