@@ -25,6 +25,7 @@ library(cowplot)
 
 # Data import
 
+
 ## Sessions
 
 ``` {r}
@@ -65,6 +66,9 @@ session_data <- tibble::tribble(
 
 
 ## Graphical Causal Models
+
+Modelling sessions were originally run on Loopy, then transcribed into DAGitty (online) to generate the following `dot` language syntax for importing into `R`. A better way of doing this is under development. 
+
 
 ``` {r}
 # CD: Course Data (both LMS and Course structure)
@@ -553,7 +557,10 @@ Coding the nodes into rough groups. There are two levels:
 
 - `node_group` is the first aggregation into slightly coarser groups of nodes.
 - `node_type` is an even more coarse grouping into a handful of types.
-- `node_nice_name` is a longer more explanatory name for plotting and putting in tables
+
+Also some nicer names of the fields:
+- `node_nice_name` is a longer more explanatory name for plotting and putting in tables.
+- `node_group_nice_name` a longer more explanatory name for node groups, as above.
 
 ``` {r}
 name_node_nice_name <- tribble(
@@ -852,7 +859,6 @@ g_get_adjustment_sets <- function(g, exposure = "S.Kn", outcome = "Grade") {
 ### Graph metrics functions
 
 
-
 ``` {r node-stats-function}
 # would like pagerank with "Grade" excluded
 
@@ -929,18 +935,11 @@ g_summary_metrics <- function(g){
 
 ```
 
-Idea - a function to compute an edge score for each edge in all the graphs. 
-- Score from 0 to 1 based on the proportion of times the edge is included, WHEN both nodes are present.
-- This is then multiplied by -1 IF there is disagreement about the direction (might need to be sufficient? i.e. if only 1 of 8 thinks it's the other way then this might be a bit extreem)
-- Would also be nice to have if the path is in the set of backdoor paths
+Generating a range of edge metrics - comparisons across models. Want to label edges in the unified DAG as 'contested' if they switch direction between some models. 
 
 ``` {r fancy-edge-weight}
 tdags <- list(tdag_s1, tdag_s2, tdag_s3, tdag_s4,
               tdag_s5, tdag_s6, tdag_s7, tdag_s8)
-
-
-
-
 
 g_labelled_edgelist <- function(g) {
     m <- as.character(substitute(g)) |> 
@@ -1019,8 +1018,6 @@ g_all_descendants_edge_list <- function(g, m) {
     return(expanded_edges)
 }
 
-distances(tdag_s1) < Inf
-
 all_descendants <- 
     bind_rows(
         g_all_descendants_edge_list(tdag_s1, "s1"),
@@ -1095,6 +1092,7 @@ edges_with_metrics <-
 
 ```
 
+Also examining counts of the kinds of paths:
 
 ``` {r}
 count_paths <- function(dag) {
@@ -1104,9 +1102,6 @@ count_paths <- function(dag) {
     frontdoor = nrow(as_tibble(paths(dag, directed = TRUE, limit = 1e4)))
   )
 }
-
-
-
 ```
 
 
@@ -1351,11 +1346,6 @@ all_node_groups_distance_to_traced <-
 ```
 
 
-### Triads
-
-What are the common triads? Do these agree?
-
-
 ## Joining metrics and session data
 
 ``` {r}
@@ -1388,7 +1378,8 @@ p_time_and_representaion <-
                name = "N adjustment sets") +
     scale_color_manual(values = friendly_pal(n = 2, "vibrant_seven"), name = "Is DAG?") +
     theme_minimal() +
-    theme(legend.position = "right")
+    theme(legend.position = "bottom",
+          legend.direction = "vertical")
 
 p_time_and_representaion
 ggsave("figures/FIG--time-modelling-and-representation.png", 
@@ -2151,7 +2142,7 @@ p_top_node_pagerank_no_outcome_trace_dist <-
     # geom_rug(aes(colour = m_dist_to_trace), alpha = 0.6, sides = "b") +
     # coord_cartesian(clip = "off") +
     guides(fill = "none") +
-    theme(legend.position = "right",
+    theme(legend.position = "bottom",
           axis.ticks.y = element_blank(),
           axis.line.y = element_blank(),
           panel.grid.major.y = element_blank(),
