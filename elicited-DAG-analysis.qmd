@@ -1253,6 +1253,40 @@ dag_complexity_metrics <-
     inner_join(all_paths_summary, by = "Model")
 ```
 
+### Graph dissimilarity
+
+Taken from suggestions in [Grames et al.  (2022)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13940) this calculates the graph dissimilarity from [Shieber et al. (2017)](https://www.nature.com/articles/ncomms13928).
+
+``` {r}
+source("d-measures.R")
+```
+
+``` {r}
+d_matrix <- tibble(from = str_c("S", 1:8)) |> 
+    mutate(
+        S1 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s1)),
+        S2 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s2)),
+        S3 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s3)),
+        S4 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s4)),
+        S5 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s5)),
+        S6 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s6)),
+        S7 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s7)),
+        S8 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s8))
+        )
+
+d_edges <- d_matrix |> 
+    pivot_longer(cols = -from,
+                 names_to = "to") |> 
+  filter(value > 0) |> 
+  rename(edge_d = value) |> 
+    mutate(from = factor(from), to = factor(to)) |> 
+    filter(as.integer(from) < as.integer(to)) |> 
+    arrange(edge_d) |> 
+    mutate(edge_w = 1 / edge_d)
+
+```
+
+
 ### Node group level metrics
 
 ``` {r}
@@ -1396,7 +1430,95 @@ gcm_metrics |>
     select(Modelling.duration, GCM.validity, acyclic, n_adj_sets)
 ```
 
+#### Figure: Time spent with model and modelling utility - including graph similarity
+
+Graph similarity computed with d-Measure. 
+
+Only showing the upper 50% of edges 
+
+
+
+``` {r}
+d_between_models_median <- median(pull(d_edges, edge_d))
+
+print(str_c("Median d-measure between models is ", round(d_between_models_median, 3)))
+
+d_between_models_by_time_and_utility <- 
+    d_edges |> 
+    inner_join(
+        gcm_metrics |> 
+            mutate(from = Model) |> 
+            select(from, xfrom = Modelling.duration, yfrom = GCM.validity)
+    ) |> 
+    inner_join(
+        gcm_metrics |> 
+            mutate(to = Model) |> 
+            select(to, xto = Modelling.duration, yto = GCM.validity)
+    ) 
+
+p_time_and_representaion_with_distance <- 
+    gcm_metrics |> 
+    mutate(acyclic = if_else(acyclic, "Yes, DAG", "No, contained cycles")) |> 
+    ggplot() +
+    geom_segment(
+        data = d_between_models_by_time_and_utility |> 
+            filter(edge_d < d_between_models_median),
+        aes(x = xfrom, xend = xto, y = yfrom, yend = yto,
+            alpha = edge_w), size = 0.5, color = "black") +
+    geom_point(data = gcm_metrics, 
+               aes(x = Modelling.duration, y = GCM.validity, size = n_adj_sets, colour = acyclic)) +
+    # geom_text(aes(label = Model), nudge_y = -.1) +
+    scale_y_continuous(limits = c(1, 4),
+                       breaks = c(1:4),
+                       labels = c("Trivially", "Simply", "Adequately", "Well"),
+                       name = "Representation of GCM") +
+     scale_x_time(labels = label_time(format = "%M:%S"),
+                  name = "Time spent constructing model (minutes)") +
+    scale_size(range = c(2,7),
+               breaks = range(gcm_metrics$n_adj_sets),
+               # labels = c("None", )
+               name = "N adjustment sets") +
+    scale_alpha_continuous(range = c(0.1, 0.7), guide = "none") +
+    scale_color_manual(values = friendly_pal(n = 2, "vibrant_seven"), name = "Is DAG?") +
+    theme_minimal() +
+    theme(legend.position = "bottom",
+          legend.direction = "vertical",
+          panel.grid.major = element_line(color = "grey85", linewidth = 0.2),
+          panel.grid.minor = element_line(color = "grey92", linewidth = 0.1)
+    )
+
+p_time_and_representaion_with_distance
+ggsave("figures/FIG--time-modelling-and-representation-with-distances.png", 
+       width = 5, height = 4, 
+       dpi = 900)
+```
+
+
 ## DAG networks
+
+### Visualising model dissimilarities
+
+``` {r}
+tbl_graph(
+    nodes = dag_complexity_metrics |> rename(name = Model),
+    edges = d_edges) |> 
+    activate("edges") |> 
+    filter(edge_d < 0.33) |> 
+    ggraph(layout = "fr") +
+    geom_edge_fan(aes(alpha = edge_w)) +
+    geom_node_point(aes(size = density, color = factor(acyclic))) +
+    geom_node_text(aes(label = name), repel = T) +
+    theme_graph() +
+    ggtitle("Graph dissimilarities")
+```
+
+Same again, but hierarchical clustering
+
+``` {r}
+hc <- hclust(d_matrix |> select(-from) |> as.dist())
+plot(hc)
+```
+
 
 ### Edge coherence
 
