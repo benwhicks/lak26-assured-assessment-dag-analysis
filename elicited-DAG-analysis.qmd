@@ -64,7 +64,6 @@ session_data <- tibble::tribble(
 
 ```
 
-
 ## Graphical Causal Models
 
 Modelling sessions were originally run on Loopy, then transcribed into DAGitty (online) to generate the following `dot` language syntax for importing into `R`. A better way of doing this is under development. 
@@ -487,7 +486,6 @@ S.Kn -> Grade
 
 ```
 
-
 ### Tidy graphs
 
 Data imported as DAGitty objects, but need to be in tidygraph format for many calculations and visualisations.
@@ -527,6 +525,8 @@ dag_to_tidy_graph <- function(dag){
 }
 ```
 
+Creating a list of all the DAGs in tidy format:
+
 ``` {r}
 tdag_s1 <- dag_to_tidy_graph(dag_s1)
 tdag_s2 <- dag_to_tidy_graph(dag_s2)
@@ -561,6 +561,7 @@ Coding the nodes into rough groups. There are two levels:
 Also some nicer names of the fields:
 - `node_nice_name` is a longer more explanatory name for plotting and putting in tables.
 - `node_group_nice_name` a longer more explanatory name for node groups, as above.
+
 
 ``` {r}
 name_node_nice_name <- tribble(
@@ -667,6 +668,8 @@ node_group_nice_name <- tribble(
 )
 ```
 
+### Coding node groups
+
 ``` {r node-group}
 code_node_group <- function(v) {
     case_when(
@@ -717,6 +720,8 @@ code_node_group <- function(v) {
     )
 }
 ```
+
+### Coding node types
 
 ``` {r node-type}
 code_node_type <- function(n) {
@@ -1143,12 +1148,12 @@ merged_all_graph <- tbl_graph(nodes = merged_nodes, edges = merged_edges)
 # View(merged_nodes |> arrange(name))
 ```
 
-## Coursen graphs
+## Coarsen graphs
 
 This is based on the coding of the nodes into node groups. 
 
 ``` {r}
-g_coursen_dag_by_ng <- function(g){
+g_coarsen_dag_by_ng <- function(g){
     new_nodes <- g %N>%
         as_tibble() |> 
         mutate(name = code_node_group(name),
@@ -1160,6 +1165,26 @@ g_coursen_dag_by_ng <- function(g){
     new_edges <- g |> 
         g_edgelist() |> 
     mutate(across(from:to, code_node_group)) |> 
+    count(from, to) |> 
+    rename(edge_w = n)
+    
+    tbl_graph(nodes = new_nodes, edges = new_edges)
+}
+```
+
+A more brutal coarsening by node type.
+
+``` {r}
+g_coarsen_dag_by_type <- function(g){
+    new_nodes <- g %N>%
+        as_tibble() |> 
+        mutate(name = code_node_type(name)) |> 
+        count(name) |> 
+        rename(node_w = n)
+    
+    new_edges <- g |> 
+        g_edgelist() |> 
+    mutate(across(from:to, code_node_type)) |> 
     count(from, to) |> 
     rename(edge_w = n)
     
@@ -1258,12 +1283,17 @@ dag_complexity_metrics <-
 Taken from suggestions in [Grames et al.  (2022)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13940) this calculates the graph dissimilarity from [Shieber et al. (2017)](https://www.nature.com/articles/ncomms13928).
 
 ``` {r}
-source("d-measures.R")
+source("d-measures.R") # Functions from Grames et al. 
 ```
 
+Creating distance matrices for both the fine and coarse graphs. The coarse seem to give a better 'feel' for the differences in the models. In the end a mixture distnace is created using the average of the dissimilarity at each level: *node*, *group* and *type*.
+
 ``` {r}
-d_matrix <- tibble(from = str_c("S", 1:8)) |> 
-    mutate(
+coarsened_tdags <- map(tdags, g_coarsen_dag_by_ng)
+coarsest_tdags <- map(tdags, g_coarsen_dag_by_type)
+
+d_matrix_fine <-  
+    data.frame(
         S1 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s1)),
         S2 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s2)),
         S3 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s3)),
@@ -1273,6 +1303,39 @@ d_matrix <- tibble(from = str_c("S", 1:8)) |>
         S7 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s7)),
         S8 = map_dbl(tdags, ~calc_dissimilarity(., tdag_s8))
         )
+
+d_matrix_coarse <-  
+    data.frame(
+        S1 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[1]])),
+        S2 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[2]])),
+        S3 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[3]])),
+        S4 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[4]])),
+        S5 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[5]])),
+        S6 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[6]])),
+        S7 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[7]])),
+        S8 = map_dbl(coarsened_tdags, ~calc_dissimilarity(., coarsened_tdags[[8]]))
+        )
+
+d_matrix_coarsest <-  
+    data.frame(
+        S1 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[1]])),
+        S2 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[2]])),
+        S3 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[3]])),
+        S4 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[4]])),
+        S5 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[5]])),
+        S6 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[6]])),
+        S7 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[7]])),
+        S8 = map_dbl(coarsest_tdags, ~calc_dissimilarity(., coarsest_tdags[[8]]))
+        )
+
+d_matrix <- # trying coarse only - seems a better representation
+    tibble(from = str_c("S", 1:8)) |> 
+    bind_cols(d_matrix_coarse)
+
+d_matrix <- bind_cols( # weighted average: 3 parts coarse, 1 part fine. Fine alone seems to miss the point
+    tibble(from = str_c("S", 1:8)),
+    (d_matrix_fine + d_matrix_coarse + d_matrix_coarsest) / 3)
+
 
 d_edges <- d_matrix |> 
     pivot_longer(cols = -from,
@@ -1442,6 +1505,14 @@ Only showing the upper 50% of edges
 d_between_models_median <- median(pull(d_edges, edge_d))
 
 print(str_c("Median d-measure between models is ", round(d_between_models_median, 3)))
+
+d_edges |> 
+    slice(1)
+
+d_edges |> 
+    arrange(edge_w) |> 
+    slice(1)
+
 
 d_between_models_by_time_and_utility <- 
     d_edges |> 
@@ -1804,6 +1875,8 @@ pFineTogetherLabelled
 # ggsave("dags_fine_all_and_merged.svg", pFineTogether, width = 9, height = 10)
 ggsave("figures/FIG--dags_fine_all_and_merged_labelled.png", pFineTogetherLabelled, width = 9, height = 10, dpi = 900)
 # ggsave("dags_fine_all_and_merged_labelled.svg", pFineTogetherLabelled, width = 9, height = 10)
+
+print("a, d, g are models S2, S3, S4; b, e are S8 and S1; c, f, h are S7, S5, S6. Closest models are therefore d and g (D-measure 0.105) and the furthest are e and 7 (D-measure 0.324)")
 ```
 
 #### Common patterns - fine
@@ -1848,7 +1921,7 @@ merged_course_models <-
 ``` {r plotting-course-graph}
 merged_course_layout <- 
     merged_all_graph |> 
-    g_coursen_dag_by_ng() |> 
+    g_coarsen_dag_by_ng() |> 
     create_layout(layout = "sugiyama") |> 
     mutate(
         x = case_when(
@@ -1920,14 +1993,14 @@ pCourseMerged + geom_node_text(aes(label = name, size = node_w, alpha = node_w),
 ```
 
 ``` {r}
-p1course <- g_coursen_dag_by_ng(tdag_s1) |> g_plot_course()
-p2course <- g_coursen_dag_by_ng(tdag_s2) |> g_plot_course()
-p3course <- g_coursen_dag_by_ng(tdag_s3) |> g_plot_course()
-p4course <- g_coursen_dag_by_ng(tdag_s4) |> g_plot_course()
-p5course <- g_coursen_dag_by_ng(tdag_s5) |> g_plot_course()
-p6course <- g_coursen_dag_by_ng(tdag_s6) |> g_plot_course()
-p7course <- g_coursen_dag_by_ng(tdag_s7) |> g_plot_course()
-p8course <- g_coursen_dag_by_ng(tdag_s8) |> g_plot_course()
+p1course <- g_coarsen_dag_by_ng(tdag_s1) |> g_plot_course()
+p2course <- g_coarsen_dag_by_ng(tdag_s2) |> g_plot_course()
+p3course <- g_coarsen_dag_by_ng(tdag_s3) |> g_plot_course()
+p4course <- g_coarsen_dag_by_ng(tdag_s4) |> g_plot_course()
+p5course <- g_coarsen_dag_by_ng(tdag_s5) |> g_plot_course()
+p6course <- g_coarsen_dag_by_ng(tdag_s6) |> g_plot_course()
+p7course <- g_coarsen_dag_by_ng(tdag_s7) |> g_plot_course()
+p8course <- g_coarsen_dag_by_ng(tdag_s8) |> g_plot_course()
 
 pAllcourse <- (p1course | p2course | p3course | p4course) / (p5course | p6course | p7course | p8course)
 # ggsave("dags_all_course.svg", pAllcourse, width = 18, height = 9)
@@ -2248,7 +2321,7 @@ p_top_node_pagerank_no_outcome_trace_dist <-
         high = friendly_pals$contrast_three[[1]],
         midpoint = mean(range(d_ng_trace_importance$m_dist_to_trace)),
                          breaks = range(d_ng_trace_importance$m_dist_to_trace),
-                         labels = c("Traced","Untraced"),
+                         labels = c("Observed","Latent"),
                          name = "",
         guide = guide_colorbar(reverse = TRUE)
         ) +
