@@ -1668,8 +1668,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="figure-time-spent-with-model-and-modelling-utility---including-graph-similarity" class="level4">
-<h4 class="anchored" data-anchor-id="figure-time-spent-with-model-and-modelling-utility---including-graph-similarity">Figure: Time spent with model and modelling utility - including graph similarity</h4>
+<section id="figure-optional-time-spent-with-model-and-modelling-utility---including-graph-similarity" class="level4">
+<h4 class="anchored" data-anchor-id="figure-optional-time-spent-with-model-and-modelling-utility---including-graph-similarity">Figure (OPTIONAL): Time spent with model and modelling utility - including graph similarity</h4>
 <p>Graph similarity computed with d-Measure.</p>
 <p>Only showing the upper 50% of edges</p>
 <div class="cell">
@@ -2117,20 +2117,20 @@ window.Quarto = {
 <span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>pAll3by3 <span class="ot">&lt;-</span> </span>
 <span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p2peerHighlight,<span class="st">"(a)"</span>)<span class="sc">|</span> </span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p8, <span class="st">"(b)"</span>) <span class="sc">|</span> </span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p7KnHighlight, <span class="st">"(c)"</span>)) <span class="sc">/</span> </span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p2peerHighlight,<span class="st">"a"</span>)<span class="sc">|</span> </span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p8, <span class="st">"b"</span>) <span class="sc">|</span> </span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p7KnHighlight, <span class="st">"c"</span>)) <span class="sc">/</span> </span>
 <span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p4peerHighlight, <span class="st">"(d)"</span>) <span class="sc">|</span> </span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p1, <span class="st">"(e)"</span>) <span class="sc">|</span> </span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p5KnHighlight, <span class="st">"(f)"</span>)) <span class="sc">/</span> </span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p4peerHighlight, <span class="st">"d"</span>) <span class="sc">|</span> </span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p1, <span class="st">"e"</span>) <span class="sc">|</span> </span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p5KnHighlight, <span class="st">"f"</span>)) <span class="sc">/</span> </span>
 <span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p3peerHighlight, <span class="st">"(g)"</span>) <span class="sc">|</span> </span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tag_plot</span>(p3peerHighlight, <span class="st">"g"</span>) <span class="sc">|</span> </span>
 <span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>            leg_tall_plot <span class="sc">|</span> </span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p6KnHighlight, <span class="st">"(h)"</span>)) </span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tag_plot</span>(p6KnHighlight, <span class="st">"h"</span>)) </span>
 <span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>     </span>
 <span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> <span class="fu">tag_plot</span>(pMergedFineLabelled, <span class="st">"(i)"</span>) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> <span class="fu">tag_plot</span>(pMergedFineLabelled, <span class="st">"i"</span>) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>pFineTogether <span class="ot">&lt;-</span> pAll3by3 <span class="sc">/</span> pMergedFine <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>pFineTogetherLabelled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>

@@ -739,6 +739,9 @@ code_node_type <- function(n) {
 
 ```
 
+### Coding node measurability
+
+
 From the node groups, describe how easy (or not) they are to measure. This is in three levels:
 
 - Directly: Data is available or easy enough to get directly for the node
@@ -747,7 +750,7 @@ From the node groups, describe how easy (or not) they are to measure. This is in
 
 By "direct proxy" I mean one step away in the causal graph. So if $X,Y$ is not measurably, but $Z$ is then $X\rightarrow Z$ would mean that $X$ is measurable by proxy. However if at best we can only justify $X \rightarrow Y \rightarrow Z$ then $X$ is intangible. 
 
-``` {r node-measurability}
+``` {r node-measurability-old}
 # Node measurability function
 
 # old_code_node_measurability <- function(ng) {
@@ -766,7 +769,7 @@ By "direct proxy" I mean one step away in the causal graph. So if $X,Y$ is not m
 #         factor(levels = c("Directly", "Proxy", "Intangible"))
 # }
 
-code_node_measurability <- function(node) {
+code_node_measurability_old <- function(node) {
     case_when(
         str_detect(node, "^CD") ~ "Traced",
         str_detect(node, "^Grade") ~ "Traced",
@@ -783,6 +786,45 @@ code_node_measurability <- function(node) {
         str_detect(node, "^T") ~ "Untraced"
     ) |> 
         factor(levels = c("Traced", "Untraced"))
+}
+```
+
+``` {r node-measurability}
+code_node_measurability <- function(node) {
+    case_when(
+        # Student
+        node == "S.Att.SocCap" ~ "PO", # check
+        node == "S.Att.Nro" ~ "O", # check
+        node == "S.Att.Eq" ~ "DW", # check
+        node == "S.Att.HSk" ~ "L", # check
+        str_detect(node, "^S") ~ "L", # Latent
+        str_detect(node, "^S") ~ "L",
+        # Help
+        node == "H.other.evil" ~ "L",
+        node == "H.Peer" ~ "L",
+        node == "H.AI.evil.code" ~ "PO", # Potentially observable
+        node == "H.AI.evil.write" ~ "PO",
+        node == "H.AI.evil.write" ~ "PO",
+        str_detect(node, "^H\\.AI") ~ "PO",
+        str_detect(node, "^H") ~ "L",
+        # Assessment
+        node == "Grade" ~ "DW",
+        node == "Grade.Exam" ~ "DW",
+        str_detect(node, "^Grade") ~ "O",
+        # Learning data
+        node == "CD.LMS" ~ "DW",
+        str_detect(node, "^CD\\.LMS") ~ "O",
+        node == "CD.Att" ~ "PO",
+        node == "CD.Str" ~ "DW", # check
+        node == "CD" ~ "PO", # check
+        # Learning design
+        str_detect(node, "^LD") ~ "PO",
+        # Teacher
+        node == "T.Act.UseAI" ~ "PO",
+        node == "T.Aff.WrkLd" ~ "PO", # check this, not act with integ as L
+        str_detect(node, "^T") ~ "L"
+    ) |> 
+        factor(levels = c("DW", "O", "PO", "L"))
 }
 ```
 
@@ -912,12 +954,18 @@ g_summary_metrics <- function(g){
         as_tibble() |> 
         left_join(pagerank_no_outcome, by = "name")
     
-    p_traced <- mean(n.df$m == "Traced")
-    p_untraced <- mean(n.df$m == "Untraced")
-    pgrnk_traced <- sum(n.df |> filter(m == "Traced") |> pull(pgrnk))
-    pgrnk_untraced <- sum(n.df |> filter(m == "Untraced") |> pull(pgrnk))
-    pgrnk_no_outcome_traced <- sum(n.df |> filter(m == "Traced") |> pull(pagerank_no_outcome))
-    pgrnk_no_outcome_untraced <- sum(n.df |> filter(m == "Untraced") |> pull(pagerank_no_outcome))
+    # p_traced <- mean(n.df$m == "Traced")
+    # p_untraced <- mean(n.df$m == "Untraced")
+    # pgrnk_traced <- sum(n.df |> filter(m == "Traced") |> pull(pgrnk))
+    # pgrnk_untraced <- sum(n.df |> filter(m == "Untraced") |> pull(pgrnk))
+    # pgrnk_no_outcome_traced <- sum(n.df |> filter(m == "Traced") |> pull(pagerank_no_outcome))
+    # pgrnk_no_outcome_untraced <- sum(n.df |> filter(m == "Untraced") |> pull(pagerank_no_outcome))
+    
+    p_dw <- mean(n.df$m == "DW")
+    p_o <- mean(n.df$m == "O")
+    p_po <- mean(n.df$m == "PO")
+    p_l <- mean(n.df$m == "L")
+    measure_metric <- (3 * p_dw + 2 * p_o + 1 * p_po ) / 3
     
     graph_metrics <- list(
         order     = gorder(g), # number of nodes
@@ -927,12 +975,7 @@ g_summary_metrics <- function(g){
         mean_path = mean_distance(g),
         clustering= transitivity(g, type = "global"),
         acyclic = igraph::is_acyclic(as.igraph(g)),
-        p_traced = p_traced,
-        p_untraced = p_untraced,
-        pgrnk_traced = pgrnk_traced,
-        pgrnk_untraced = pgrnk_untraced,
-        pgrnk_no_outcome_traced = pgrnk_no_outcome_traced,
-        pgrnk_no_outcome_untraced = pgrnk_no_outcome_untraced
+        measurability = measure_metric
     )
     graph_metrics
 }
@@ -1406,10 +1449,11 @@ g_distances <- function(g) {
         pivot_longer(-from, names_to = "to", values_to = "distance")
 }
 
-g_distancce_to_traced <- function(g) {
+g_distancce_to_traced <- function(g) { #old
     g_distances(g) |> 
         inner_join(all_nodes_with_metrics |> 
-                       filter(measurability == "Traced") |> 
+                       # filter(measurability == "Traced") |> 
+                       filter(measurability == "DW") |> 
                        select(to = name) |> 
                        distinct()) |> 
         group_by(from) |> 
@@ -1493,7 +1537,7 @@ gcm_metrics |>
     select(Modelling.duration, GCM.validity, acyclic, n_adj_sets)
 ```
 
-#### Figure: Time spent with model and modelling utility - including graph similarity
+#### Figure (OPTIONAL): Time spent with model and modelling utility - including graph similarity
 
 Graph similarity computed with d-Measure. 
 
@@ -1854,20 +1898,20 @@ tag_plot <- function(p, tag, x = 0, y = 0.9, fontsize = 8) {
 
 pAll3by3 <- 
     (
-        tag_plot(p2peerHighlight,"(a)")| 
-            tag_plot(p8, "(b)") | 
-            tag_plot(p7KnHighlight, "(c)")) / 
+        tag_plot(p2peerHighlight,"a")| 
+            tag_plot(p8, "b") | 
+            tag_plot(p7KnHighlight, "c")) / 
     (
-        tag_plot(p4peerHighlight, "(d)") | 
-            tag_plot(p1, "(e)") | 
-            tag_plot(p5KnHighlight, "(f)")) / 
+        tag_plot(p4peerHighlight, "d") | 
+            tag_plot(p1, "e") | 
+            tag_plot(p5KnHighlight, "f")) / 
     (
-        tag_plot(p3peerHighlight, "(g)") | 
+        tag_plot(p3peerHighlight, "g") | 
             leg_tall_plot | 
-            tag_plot(p6KnHighlight, "(h)")) 
+            tag_plot(p6KnHighlight, "h")) 
      
 
-pFineTogetherLabelled <- pAll3by3 / tag_plot(pMergedFineLabelled, "(i)") + plot_layout(heights = c(1,1,1,3))
+pFineTogetherLabelled <- pAll3by3 / tag_plot(pMergedFineLabelled, "i") + plot_layout(heights = c(1,1,1,3))
 pFineTogether <- pAll3by3 / pMergedFine + plot_layout(heights = c(1,1,1,3))
 pFineTogetherLabelled
 
@@ -2239,7 +2283,10 @@ all_node_groups_aggregated_metrics <-
     all_nodes_with_metrics |> 
     group_by(Model, node_group, node_type) |> 
     summarise(
-        p_traced = mean(measurability == "Traced"),
+        p_traced = mean(measurability == "DW"),
+        measurability = (3 * mean(measurability == "DW") +
+                             2 * mean(measurability == "O") +
+                             mean(measurability == "PO")) / 3,
         pagerank = sum(pagerank),
               pagerank_no_outcome = sum(pagerank_no_outcome),
               btw_rel = sum(btw_rel)) |> 
@@ -2250,49 +2297,86 @@ all_node_groups_aggregated_metrics <-
            overall_pagerank_no_outcome = sum(pagerank_no_outcome / 8),
            overall_btw = sum(btw_rel)) |> 
     ungroup()
+```
 
-# Betweenness
-p_top_node_btw <- 
-    all_node_groups_aggregated_metrics |>
-    # inner_join(node_group_nice_name) |> 
-    # rename(node_group = nice_name) |> 
+#### Figure: Node importance and data availability
+
+``` {r}
+d_ng_measurability_importance <- 
+    all_node_groups_aggregated_metrics |> 
+    filter(node_group != "Grade.Outcome") |>
+    inner_join(node_group_nice_name, by = "node_group") |>
+    mutate(node_group = nice_name) |>
     group_by(node_group) |>
-    mutate(p_traced_group = mean(p_traced)) |>
+    mutate(m_group = mean(measurability)) |>
     ungroup() |> 
-    mutate(node_group = fct_reorder(node_group, overall_btw)) |> 
+    mutate(node_group = fct_reorder(node_group, pagerank_no_outcome)) |> 
     arrange(desc(node_group)) |> 
-    filter(overall_btw > 2) |>
-    ggplot(aes(x = btw_rel)) +
-    geom_boxplot(aes(fill = p_traced_group), colour = "grey", size = 0.3,  alpha = 0.8) +
-    # geom_point(aes(colour = btw_rel), alpha = 0.5) +
-    # viridis::scale_color_viridis("Centrality", option = "F", guide = "none") +
-    # ggsci::scale_fill_npg() +
-    scale_fill_gradient(low = friendly_pals$vibrant_seven[[1]], high = friendly_pals$vibrant_seven[[6]]) +
-    # viridis::scale_fill_viridis("Centrality", option = "F") +
-    ylab("Node groups with highest central importance") +
-    xlab("Node Centrality (relative Betweenness)") +
-    facet_grid(node_group ~ .) +
-    guides(color = "right") +
+    filter(n > 3) # need at least half the models with node group
+
+
+p_top_node_pagerank_no_outcome_measurability <- 
+    d_ng_measurability_importance |> 
+    # arrange(Model, node_group) |> 
+    ggplot(aes(x = pagerank_no_outcome, y = node_group)) +
+    geom_boxplot(aes(fill = m_group), colour = "lightgray", size = 0.4, alpha = 0.7) +
+    # geom_line(aes(x = pagerank_no_outcome, y = node_group, group = Model), alpha = 0.6) +
+    geom_point(aes(colour = measurability), alpha = 0.9) +
+    scale_color_gradient2(
+        low = friendly_pals$contrast_three[[1]], 
+        mid = friendly_pals$contrast_three[[2]],
+        high = friendly_pals$contrast_three[[3]],
+        midpoint = mean(range(d_ng_measurability_importance$measurability)),
+        limits = c(0,1),
+        breaks = c(0, 1/3, 2/3, 1),
+        labels = c("Latent","Potentially observable", "Observable", "Data Warehouse"),
+        name = "",
+        guide = guide_colorbar(reverse = FALSE)
+    ) +
+    scale_fill_gradient2(
+        midpoint = mean(range(d_ng_measurability_importance$m_group)),
+        limits = c(0,1),
+        low = friendly_pals$contrast_three[[1]], 
+        mid = friendly_pals$contrast_three[[2]],
+        high = friendly_pals$contrast_three[[3]]
+        ) +
     theme_minimal() +
-    theme(legend.position = "top",
-          axis.text.y = element_blank(),
+    ylab("Node group") +
+    xlab("Node groups combined Centrality (Pagerank)") +
+    # geom_rug(aes(colour = m_dist_to_trace), alpha = 0.6, sides = "b") +
+    # coord_cartesian(clip = "off") +
+    guides(fill = "none") +
+    theme(legend.position = "bottom",
+          legend.justification = "center",
+    legend.box.just = "center",
+          legend.text  = element_text(size = 8),
+          legend.key.width = unit(1.5, "cm"),
           axis.ticks.y = element_blank(),
           axis.line.y = element_blank(),
           panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank())
 
-# p_top_node_btw
-# 
-# ggsave("node_betweenness.png", p_top_node_btw, width = 10, height = 4, dpi = 600)
+# p_top_node_pagerank_no_outcome_measurability
 
-# ggsave("node_pagerank.png", p_top_node_pagerank, width = 10, height = 4, dpi = 600)
+# extract legend
+leg <- get_legend(p_top_node_pagerank_no_outcome_measurability)
+
+# arrange with relative heights (legend gets a small slice)
+p_node_importance_with_measurability <- (p_top_node_pagerank_no_outcome_measurability + theme(legend.position = "none")) /
+  wrap_elements(leg) +
+  plot_layout(heights = c(1, 0.1))
+
+p_node_importance_with_measurability
+ggsave("figures/FIG--node_pagerank_no_outcome_measurability.png", p_node_importance_with_measurability, 
+       width = 5, 
+       height = 4, 
+       dpi = 900)
+
 ```
-
-#### Figure: Node importance and trace availability
 
 
 ``` {r}
-# Pagerank no outcome - dist to traced version
+# Pagerank no outcome - dist to traced version - old
 
 d_ng_trace_importance <- 
     all_node_groups_aggregated_metrics |> 
