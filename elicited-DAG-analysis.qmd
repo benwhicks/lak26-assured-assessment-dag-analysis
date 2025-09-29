@@ -2366,12 +2366,75 @@ p_node_importance_with_measurability <- (wrap_elements(leg) /
     (p_top_node_pagerank_no_outcome_measurability + theme(legend.position = "none"))) +
   plot_layout(heights = c(0.2, 1))
 
-p_node_importance_with_measurability
-ggsave("figures/FIG--node_pagerank_no_outcome_measurability.png", p_node_importance_with_measurability, 
+# p_node_importance_with_measurability
+# ggsave("figures/FIG--node_pagerank_no_outcome_measurability.png", p_node_importance_with_measurability,
+#        width = 5,
+#        height = 4,
+#        dpi = 900)
+
+```
+
+With discrete scale instead
+
+``` {r}
+m_pal <- friendly_pals$ibm_five[c(1,5,4,3)]
+p_top_node_pagerank_no_outcome_measurability_discrete <- 
+    d_ng_measurability_importance |>
+    mutate(
+        measurability = case_when(
+            measurability < (1/6) ~ "Latent", 
+            measurability < 0.5 ~ "Potentially observable",
+            measurability < (5/6) ~ "Observable",
+            TRUE ~ "Data warehouse") |> 
+            factor(levels = c("Latent", "Potentially observable", "Observable", "Data warehouse"))
+    ) |> 
+    arrange(Model, node_group) |>
+    ggplot(aes(x = pagerank_no_outcome, y = node_group)) +
+    geom_boxplot(aes(fill = m_group), colour = "lightgray", size = 0.4, alpha = 0.7) +
+    # geom_line(aes(x = pagerank_no_outcome, y = node_group, group = Model), alpha = 0.6) +
+    geom_point(aes(colour = measurability), alpha = 0.9) +
+    scale_color_manual(values = m_pal, # or retro four
+                       labels = c("Latent","Potentially\nobservable", "Observable", "Data\nWarehouse"),
+                       name = ""
+    ) +
+    scale_fill_gradientn(
+        colours = m_pal,
+        breaks = c(0, 1/3, 2/3, 5/6)
+        ) +
+        theme_minimal() +
+            ylab("Node group") +
+            xlab("Node groups combined Centrality (Pagerank)") +
+            # geom_rug(aes(colour = m_dist_to_trace), alpha = 0.6, sides = "b") +
+            # coord_cartesian(clip = "off") +
+            guides(fill = "none",
+                   color = guide_legend(nrow = 2, byrow = TRUE)) +
+            theme(legend.position = "bottom",
+          legend.direction = "vertical",
+                  legend.justification = "left",
+                  legend.text  = element_text(size = 8),
+                  legend.key.width = unit(1, "cm"),
+                  axis.ticks.y = element_blank(),
+                  axis.line.y = element_blank(),
+                  panel.grid.major.y = element_blank(),
+          panel.grid.minor.y = element_blank())
+    
+p_top_node_pagerank_no_outcome_measurability_discrete
+
+# 
+# # extract legend
+# leg <- get_legend(p_top_node_pagerank_no_outcome_measurability_discrete)
+# 
+# # arrange with relative heights (legend gets a small slice)
+# p_node_importance_with_measurability <- (wrap_elements(leg) /
+#     (p_top_node_pagerank_no_outcome_measurability_discrete + theme(legend.position = "none"))) +
+#   plot_layout(heights = c(0.2, 1))
+
+
+ggsave("figures/FIG--node_pagerank_no_outcome_measurability.png",
+       p_top_node_pagerank_no_outcome_measurability_discrete, 
        width = 5, 
        height = 4, 
        dpi = 900)
-
 ```
 
 As table
