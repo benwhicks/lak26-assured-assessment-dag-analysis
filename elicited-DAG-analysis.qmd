@@ -2380,7 +2380,8 @@ p_node_importance_with_measurability <- (wrap_elements(leg) /
 With discrete scale instead
 
 ``` {r}
-m_pal <- friendly_pals$ibm_five[c(1,5,4,3)]
+m_pal <- friendly_pals$ibm_five[c(2,1,4,3)]
+m_pal <- friendly_pals$nickel_five[c(5,4,1,3)]
 p_top_node_pagerank_no_outcome_measurability_discrete <- 
     d_ng_measurability_importance |>
     mutate(
