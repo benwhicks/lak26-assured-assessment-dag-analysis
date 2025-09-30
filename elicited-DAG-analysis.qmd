@@ -797,8 +797,8 @@ code_node_measurability <- function(node) {
         node == "S.Att.Nro" ~ "O", # check
         node == "S.Att.Eq" ~ "DW", # check
         node == "S.Att.HSk" ~ "L", # check
+        str_detect(node, "^S\\.Act") ~ "PO", # Latent
         str_detect(node, "^S") ~ "L", # Latent
-        str_detect(node, "^S") ~ "L",
         # Help
         node == "H.other.evil" ~ "L",
         node == "H.Peer" ~ "L",

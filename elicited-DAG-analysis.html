@@ -928,8 +928,8 @@ window.Quarto = {
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        node <span class="sc">==</span> <span class="st">"S.Att.Nro"</span> <span class="sc">~</span> <span class="st">"O"</span>, <span class="co"># check</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        node <span class="sc">==</span> <span class="st">"S.Att.Eq"</span> <span class="sc">~</span> <span class="st">"DW"</span>, <span class="co"># check</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        node <span class="sc">==</span> <span class="st">"S.Att.HSk"</span> <span class="sc">~</span> <span class="st">"L"</span>, <span class="co"># check</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_detect</span>(node, <span class="st">"^S"</span>) <span class="sc">~</span> <span class="st">"L"</span>, <span class="co"># Latent</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_detect</span>(node, <span class="st">"^S"</span>) <span class="sc">~</span> <span class="st">"L"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_detect</span>(node, <span class="st">"^S</span><span class="sc">\\</span><span class="st">.Act"</span>) <span class="sc">~</span> <span class="st">"PO"</span>, <span class="co"># Latent</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">str_detect</span>(node, <span class="st">"^S"</span>) <span class="sc">~</span> <span class="st">"L"</span>, <span class="co"># Latent</span></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Help</span></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        node <span class="sc">==</span> <span class="st">"H.other.evil"</span> <span class="sc">~</span> <span class="st">"L"</span>,</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        node <span class="sc">==</span> <span class="st">"H.Peer"</span> <span class="sc">~</span> <span class="st">"L"</span>,</span>
@@ -4051,8 +4051,8 @@ window.Quarto = {
 <pre><code> measurability  n    percent
             DW  5 0.06756757
              O  9 0.12162162
-            PO 22 0.29729730
-             L 38 0.51351351
+            PO 29 0.39189189
+             L 31 0.41891892
          Total 74 1.00000000</code></pre>
 </div>
 </div>
@@ -4242,8 +4242,8 @@ window.Quarto = {
   &lt;fct&gt;         &lt;int&gt;
 1 DW                5
 2 O                 9
-3 PO               22
-4 L                38</code></pre>
+3 PO               29
+4 L                31</code></pre>
 </div>
 </div>
 <div class="cell">
