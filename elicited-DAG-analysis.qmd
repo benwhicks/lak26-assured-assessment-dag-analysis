@@ -2407,7 +2407,7 @@ p_top_node_pagerank_no_outcome_measurability_discrete <-
             # geom_rug(aes(colour = m_dist_to_trace), alpha = 0.6, sides = "b") +
             # coord_cartesian(clip = "off") +
             guides(fill = "none",
-                   color = guide_legend(nrow = 2, byrow = TRUE)) +
+                   color = guide_legend(nrow = 2, byrow = FALSE)) +
             theme(legend.position = "bottom",
           legend.direction = "vertical",
                   legend.justification = "left",
